@@ -1,0 +1,87 @@
+ .window {
+   width: 300px;
+   height: 327px;
+   top: 70px;
+   left: 50px;
+   border: 1px solid #555;
+   position: absolute;
+   overflow: hidden;
+   background-color: #fff;
+   z-index: 999;
+ }
+
+ .window.window-focused {
+   z-index: 99999;
+ }
+
+ .window .bar {
+   width: 100%;
+   height: 27px;
+   line-height: 27px;
+   background-color: #744;
+   position: relative;
+   z-index: 4;
+ }
+
+ .window .bar:hover {
+   cursor: pointer;
+ }
+
+ .window .content {
+   width: 286px;
+   height: 286px;
+   left: 6px;
+   border: 1px solid #500;
+   position: absolute;
+   z-index: 3;
+   bottom: 6px;
+ }
+
+ .window-buttons {
+   float: right;
+   margin-right: 11px;
+   margin-top: 3px;
+ }
+
+ .window-button {
+   color: #fff;
+   font-family: helvetica, sans-serif;
+ }
+
+ .minimize-button,
+ .maximize-button,
+ .restore-button,
+ .close-button {
+   display: inline-block;
+   width: 21px;
+   height:21px;
+   background-size: 100% !important;
+ }
+
+ .minimize-button {
+   background: url("../img/minimize-icon.png");
+ }
+
+ .maximize-button {
+   background: url("../img/maximize-icon.png");
+ }
+
+ .restore-button {
+   background: url("../img/restore-icon.png");
+ }
+
+ .close-button {
+   background: url("../img/close-icon.png");
+ }
+
+  .window-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 99998;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: .7;
+  }

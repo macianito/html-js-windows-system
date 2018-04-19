@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>window</title>
+    
+    <link id="bootstrap" rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />
+    
+    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/window.css?v23" />
+    <script type="text/javascript" src="js/window.js?v23"></script>
+  </head>
+  <body>
+
+   <a href="javascript:createWindow()">Create Window</a> |
+   <a href="javascript:createWindowDimensions()">Create Window Default Dimensions</a> | 
+   <a href="javascript:createOverlay()">Create Overlay</a> |
+
+
+   <style>
+
+     * {
+       margin: 0px;
+      padding: 0px;
+     }
+
+     body {
+       overflow: hidden;
+     }
+
+   </style>
+
+   <script>
+
+
+
+
+var opts = {
+  idWindow: '#window1',
+  /* close: function(){ alert('close pero no esborra'); } */
+};
+
+var _myClass1 =  new Window(opts);
+
+_myClass1.setContentHtml('contingut meu 1');
+
+
+
+var opts = {
+  idWindow: '#window2',
+  onClose: function(){ alert('onClose event'); }
+};
+
+var _myClass2 =  new Window(opts);
+
+_myClass2.setContentHtml('contingut meu 2');
+
+
+function createOverlay() {
+
+  var opts = {
+    idWindow  : '#' + new Date().getTime(),
+    position  : {top: 105, left: 300},
+    modal     : true
+  };
+
+  var  win =  new Window(opts);
+
+  win.setContentHtml(opts.idWindow);
+
+}
+
+function createWindow() {
+
+  var opts = {
+    idWindow : '#' + new Date().getTime(),
+    position : {top: 105, left: 300},
+  };
+
+  var  win =  new Window(opts);
+
+  win.setContentHtml(opts.idWindow);
+
+}
+
+function createWindowDimensions() {
+
+  var opts = {
+    idWindow   : '#' + new Date().getTime(),
+    position   : {top: 70, left: 400},
+    dimensions : {width: 400, height: 200},
+  };
+
+  var  win =  new Window(opts);
+
+  win.setContentHtml(opts.idWindow);
+
+}
+
+</script>
+
+
+  </body>
+</html>
