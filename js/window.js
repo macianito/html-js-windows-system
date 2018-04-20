@@ -54,9 +54,9 @@ this.Window = (function($) {
       this.eventsHandlers = [];
 
       this.mouseZonePosition = null;
-      this.memCoords = null; // property to memorize coords
+      this.memCoords         = null; // property to memorize coords
 
-      this.box = null;
+      this.box    = null;
       this.boxMem = null; // aux variable to remember dimension box/window values values 
 
       this.idWindow = options.idWindow || '#window';
@@ -93,7 +93,7 @@ this.Window = (function($) {
       this.barSize        = options.barSize || 27; // set bar size
       
       
-      this.minimizedWidth = this.windowObject.width(); // set width when the window is minimized 
+      this.minimizedWidth  = this.windowObject.width(); // set width when the window is minimized 
       this.minimizedHeight = this.barSize; // set width when the window is minimized
 
       this.flags.draggable = (options.draggable === false) ? false : true; // set if window is draggable
@@ -111,7 +111,7 @@ this.Window = (function($) {
 
       _storeBox.call(this);
 
-       _setFocus.call(this); // set focus
+      _setFocus.call(this); // set focus
 
       // start Window
       _initialize.call(this);
@@ -473,6 +473,7 @@ this.Window = (function($) {
      * Destroy window and detach event handlers.
      * 
      * @private
+     * @see {@link https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/}
      *
      */
      function _destroy() {
@@ -480,7 +481,7 @@ this.Window = (function($) {
        // 1       detach events
        //         remove objects
 
-       for(var i in this.eventsHandlers) {
+       for(var i in this.eventsHandlers) { // avoiding cyclic references
 
          var element = Utils.isjQueryObject(this.eventsHandlers[i].element)
            ? this.eventsHandlers[i].element[0]
@@ -492,7 +493,7 @@ this.Window = (function($) {
 
        this.windowObject.remove();
 
-       window.windowSystem[this.idWindow] = null; // ?? Dubtos
+       window.windowSystem[this.idWindow] = null;
        delete window.windowSystem[this.idWindow];
 
     };
@@ -526,17 +527,15 @@ this.Window = (function($) {
 
           var boxMem      = Utils.getBoxElement(this.windowObject[0]);
 
-          this.box.top    = boxMem.top;
-
-          this.box.left   = boxMem.left;
-
-          this.box.bottom = boxMem.top + this.box.height;
-
-          this.box.right  = boxMem.left + this.box.width;
-
-          this.box.width  = this.box.right - this.box.left;
-
-          this.box.height = this.box.bottom - this.box.top;
+          this.box = {
+          	top    : boxMem.top,
+            left   : boxMem.left,
+            bottom : boxMem.top + this.box.height,
+            right  : boxMem.left + this.box.width,
+            width  : this.box.right - this.box.left,
+            height : this.box.bottom - this.box.top
+          };
+          
 
         } else {
 
