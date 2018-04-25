@@ -30,13 +30,13 @@ this.Window = (function($) {
 
   /**
    * Create new instance of a Window.
-   * 
+   *
    * @class Represents a Window.
-   * 
+   *
    * @param {Object} options - Options to setup the window.
-   * 
+   *
    */
-    
+
     function Window(options) {
 
         //options and helper vars
@@ -57,11 +57,11 @@ this.Window = (function($) {
       this.memCoords         = null; // property to memorize coords
 
       this.box    = null;
-      this.boxMem = null; // aux variable to remember dimension box/window values values 
+      this.boxMem = null; // aux variable to remember dimension box/window values values
 
       this.idWindow = options.idWindow || '#window';
 
-      
+
 
       var _id = this.idWindow.replace('#', ''); // set id
 
@@ -70,11 +70,11 @@ this.Window = (function($) {
       this.flags.modal = options.modal || false; // set if window is draggable
 
       if(this.flags.modal) { // if true then create overlay
-      	
+
       	_createOverlay(_id); // create html overlay
-      	
+
         window.windowSystem['overlay'].show();
-      
+
       }
 
       this.documentObject = $(document);
@@ -91,19 +91,21 @@ this.Window = (function($) {
       this.closeButton    = $(this.idWindow + ' .close-button'),
 
       this.barSize        = options.barSize || 27; // set bar size
-      
-      
-      this.minimizedWidth  = this.windowObject.width(); // set width when the window is minimized 
+
+      this.contentObject.css('padding-top', (this.barSize + 5) + 'px'); // 5px to separate bar from content top
+
+
+      this.minimizedWidth  = this.windowObject.width(); // set width when the window is minimized
       this.minimizedHeight = this.barSize; // set width when the window is minimized
 
       this.flags.draggable = (options.draggable === false) ? false : true; // set if window is draggable
 
 
       // if position is defined set the initial position
-      if(options.position || false) { 
+      if(options.position || false) {
         this.setPosition(options.position);
       }
-      
+
       // if dimensions are defined set the initial position
       if(options.dimensions || false) {
         this.setDimensions(options.dimensions);
@@ -131,15 +133,15 @@ this.Window = (function($) {
 
     /* Prototype functions
      ************************************/
-    
-    
+
+
     /**
      * Set the html content of the window.
-     * 
+     *
      * @public
      *
      * @param {string} html - content html.
-     * 
+     *
      */
     Window.prototype.setContentHtml = function(html) {
       this.contentObject.html(html);
@@ -147,11 +149,11 @@ this.Window = (function($) {
 
     /**
      * Set the content of the window as a iframe.
-     * 
+     *
      * @public
      *
      * @param {string} url - src of the iframe.
-     * 
+     *
      */
     Window.prototype.setContentIframe = function(url) {
       this.contentObject.html('<iframe src="' + url + '"></iframe>');
@@ -159,24 +161,24 @@ this.Window = (function($) {
 
     /**
      * Set the content using html from a dom element.
-     * 
+     *
      * @public
      *
      * @param {string} id - object's id where the html content come from.
-     * 
+     *
      */
     Window.prototype.setContentFromObject = function(id) {
       this.contentObject.html($(id).html());
     };
-    
-    
+
+
     /**
      * Set if window is draggable.
-     * 
+     *
      * @public
      *
      * @param {boolean} draggable - is draggable
-     * 
+     *
      */
     Window.prototype.setDraggable = function(draggable) {
       this.flags.draggable = draggable;
@@ -184,12 +186,12 @@ this.Window = (function($) {
 
     /**
      * Close and destroy window.
-     * 
+     *
      * @public
      *
      */
     Window.prototype.close = function() {
-    
+
       this.onClose();
 
       if(this.flags.modal) {
@@ -197,12 +199,12 @@ this.Window = (function($) {
       }
 
       _destroy.call(this);
-    
+
     };
 
     /**
      * Hide the window
-     * 
+     *
      * @public
      *
      */
@@ -212,7 +214,7 @@ this.Window = (function($) {
 
     /**
      * Show the window.
-     * 
+     *
      * @public
      *
      */
@@ -222,9 +224,9 @@ this.Window = (function($) {
 
    /**
     * Set the position of the window.
-    * 
+    *
     * @public
-    * 
+    *
     * @param {Object} position - coords of the window
     *
     */
@@ -236,12 +238,12 @@ this.Window = (function($) {
       });
 
    };
-   
+
   /**
    * Set the dimensions of the window.
-   * 
+   *
    * @public
-   * 
+   *
    * @param {Object} position - dimensions: width and height
    *
    */
@@ -251,8 +253,6 @@ this.Window = (function($) {
         width  : dimensions.width + 'px',
         height : dimensions.height + 'px'
       });
-      
-      _setSizeContent.call(this);
 
    };
 
@@ -265,7 +265,7 @@ this.Window = (function($) {
 
    /**
     * Initialize window events and store references to hadlers.
-    * 
+    *
     * @private
     *
     *
@@ -371,7 +371,7 @@ this.Window = (function($) {
         this.eventsHandlers.push({element: self.windowObject, handlerFunction: handler, eventType: 'mousemove'}),
 
         Utils.attachEvent(self.windowObject[0], 'mousedown', handler = function(evt) {
-        
+
           _setFocus.call(self); //  set focus to this window
 
           if(self.mouseZonePosition !== 'center') { // if resize zone
@@ -389,18 +389,18 @@ this.Window = (function($) {
         Utils.attachEvent(self.minimizeButton[0], 'click', handler = function(evt) {
 
             evt.stopPropagation();
-            
+
             if(self.flags.minimized) //  Don't do anything if it is minimized
               return false;
-           
+
            if(!self.flags.maximized)
              _storeBox.call(self);
 
             _minimizeWindow.call(self);
 
             self.maximizeButton.removeClass('maximize-button restore-button');
-            
-            
+
+
             if(self.flags.maximized) {
 
               self.maximizeButton.addClass('maximize-button');
@@ -410,7 +410,7 @@ this.Window = (function($) {
               self.maximizeButton.addClass('restore-button');
 
             }
-            
+
              self.flags.minimized = true;
 
         }),
@@ -420,7 +420,7 @@ this.Window = (function($) {
         Utils.attachEvent(self.maximizeButton[0], 'click', handler = function(evt) {
 
            evt.stopPropagation();
-           
+
            self.maximizeButton.removeClass('maximize-button restore-button');
 
            if(self.flags.minimized && !self.flags.maximized) { // state: minimized from a normal window
@@ -468,10 +468,10 @@ this.Window = (function($) {
         this.eventsHandlers.push({element: this.closeButton, handlerFunction: handler, eventType: 'click'});
 
     }
-    
+
     /**
      * Destroy window and detach event handlers.
-     * 
+     *
      * @private
      * @see {@link https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/}
      *
@@ -497,11 +497,11 @@ this.Window = (function($) {
        delete window.windowSystem[this.idWindow];
 
     };
-    
-    
+
+
    /**
     * Set the focus to the window.
-    * 
+    *
     * @private
     *
     */
@@ -515,7 +515,7 @@ this.Window = (function($) {
 
     /**
     * Store the dimensions of the window
-    * 
+    *
     * @private
     *
     */
@@ -535,7 +535,7 @@ this.Window = (function($) {
             width  : this.box.right - this.box.left,
             height : this.box.bottom - this.box.top
           };
-          
+
 
         } else {
 
@@ -548,26 +548,24 @@ this.Window = (function($) {
 
     /**
      * Minimize the window
-     * 
+     *
      * @private
      *
      */
      function _minimizeWindow() {
-       
+
        this.windowObject.css({
          top    : this.box.top + 'px',
          left   : this.box.left + 'px',
          width  : this.minimizedWidth + 'px', // this.box.width
          height : this.minimizedHeight + 'px'
        });
-
-       _setSizeContent.call(this);
      }
 
 
     /**
      * Maximize the window
-     * 
+     *
      * @private
      *
      */
@@ -580,13 +578,11 @@ this.Window = (function($) {
          height : $(window).width()
        });
 
-       _setSizeContent.call(this);
-
      }
 
     /**
      * Retore the window to its normal size
-     * 
+     *
      * @private
      *
      */
@@ -594,30 +590,12 @@ this.Window = (function($) {
 
        _setCssDimensionsElement(this.windowObject, this.box);
 
-       _setSizeContent.call(this);
-
-     }
-
-
-    /**
-     * Establish the size of the window's content
-     * 
-     * @private
-     *
-     */
-     function _setSizeContent() {
-
-       this.contentObject.css({
-         width  : (this.windowObject.width() - 14) + 'px', // 14 pels padding finestra
-         height : (this.windowObject.height() - 14 - this.barSize) + 'px'
-       });
-
      }
 
 
     /**
      * Resize the window
-     * 
+     *
      * @private
      *
      */
@@ -656,13 +634,12 @@ this.Window = (function($) {
 
         _setCssDimensionsElement(this.windowObject, this.box);
 
-        _setSizeContent.call(this);
 
      }
 
     /**
      * Momerize coordinates of the window
-     * 
+     *
      * @private
      *
      */
@@ -671,7 +648,7 @@ this.Window = (function($) {
        this.memCoords = _getAbsoluteMousePosition(evt);
 
        var windowPosition = this.windowObject.position();
-       
+
        this.memCoords.top = windowPosition.top,
        this.memCoords.left = windowPosition.left;
 
@@ -679,7 +656,7 @@ this.Window = (function($) {
 
     /**
      * Store the position of the mouse regarding the window frame
-     * 
+     *
      * @private
      *
      */
@@ -687,7 +664,7 @@ this.Window = (function($) {
 
         var mouse = _getMousePosition(object, evt);
 
-        
+
         if(mouse.x < this.box.left + 10) { // left
 
            if(mouse.y < this.box.top + 10) {
@@ -721,7 +698,7 @@ this.Window = (function($) {
 
     /**
      * Change the cursor according to cursor position
-     * 
+     *
      * @private
      *
      */
@@ -731,14 +708,14 @@ this.Window = (function($) {
 
     /**
      * Create html window
-     * 
+     *
      * @private
-     * 
+     *
      * @param {string} id - Id of the window.
      *
      */
 	 function _createWindow(id) {
-	
+
 	   $('<div id="' + id + '" class="window">' +
 	     '  <div class="bar">' +
 	     '    <div class="window-buttons">' +
@@ -749,14 +726,14 @@ this.Window = (function($) {
 	     '  </div>' +
 	     '  <div class="content"></div>' +
 	     '</div>').appendTo('body');
-	
+
 	 }
 
     /**
      * Create html overlay
-     * 
+     *
      * @private
-     * 
+     *
      * @param {string} id - Id of the overlay.
      *
      */
@@ -771,13 +748,13 @@ this.Window = (function($) {
        }
 
      }
-     
+
 
     /**
      * Set the dimensions of a dom object
-     * 
+     *
      * @private
-     * 
+     *
      * @param {object|jQuery object} element - Element over which to apply the new dimensions.
      * @param {object} box - Dimensions to apply.
      *
@@ -795,9 +772,9 @@ this.Window = (function($) {
 
      /**
      * Get the position of the mouse relative to its parent
-     * 
+     *
      * @private
-     * 
+     *
      * @param {object} object - object
      * @param {object} evt - Event object.
      *
@@ -808,7 +785,7 @@ this.Window = (function($) {
 
     /**
      * Get the absolute position of the mouse
-     * 
+     *
      * @private
      *
      * @param {object} evt - Event object.
