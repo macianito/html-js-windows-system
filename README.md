@@ -2,7 +2,7 @@
 
 A window manager written in Javascript, HTML5 and CSS3.
 
-This project started as an entertainment feel free to fork and send PRs!
+This project started as an entertainment, feel free to download and use or fork!
 
 ### Live Demo ###
 
