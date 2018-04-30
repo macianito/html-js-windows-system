@@ -15,8 +15,23 @@ This project started as an entertainment, feel free to download and use or fork!
 
 ### Features ###
 
-* basic windowing experience
-* create normal and modal windows
-* windows may be resized, maximized, and minimized
-* minimize works by minimizing to a small square that can be moved independently. Clicking it restores to its original size and location. Minimizing again moves the small square back to the last minimized location.
-* emits events
+* Basic windowing experience
+* Create normal and modal windows
+* Windows may be resized, maximized, and minimized
+* Minimize works by minimizing to a small square that can be moved independently. Clicking it restores to its original size and location. Minimizing again moves the small square back to the last minimized location.
+* Emits events
+
+## Simple example ## 
+
+```js
+    var opts = {
+      idWindow   : '#windowId',
+      position   : {top: 70, left: 400},
+      dimensions : {width: 400, height: 200},
+    };
+
+    var  win =  new Window(opts);
+
+    win.setContentHtml(opts.idWindow);
+
+```
