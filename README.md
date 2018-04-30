@@ -15,5 +15,8 @@ This project started as an entertainment, feel free to download and use or fork!
 
 ### Features ###
 
-* Create windows
-* Create overlays
+* basic windowing experience
+* create normal and modal windows
+* windows may be resized, maximized, and minimized
+* minimize works by minimizing to a small square that can be moved independently. Clicking it restores to its original size and location. Minimizing again moves the small square back to the last minimized location.
+* emits events
