@@ -32,6 +32,6 @@ This project started as an entertainment, feel free to download and use or fork!
 
     var  win =  new Window(opts);
 
-    win.setContentHtml(opts.idWindow);
+    win.setContentHtml('<h2>HTML Window Content</h2>);
 
 ```
