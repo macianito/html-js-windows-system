@@ -6,7 +6,7 @@ This project started as an entertainment, feel free to download and use or fork!
 
 ### Live Demo ###
 
-[Demo](https://mazius.org)
+[http://phplandia.com/examples/Window/window.html](http://phplandia.com/examples/Window/window.html)
 
 ### Include ###
 
