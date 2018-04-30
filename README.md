@@ -51,5 +51,4 @@ This project started as an entertainment, feel free to download and use or fork!
 [http://phplandia.com/examples/Window/window.html](http://phplandia.com/examples/Window/window.html)
 
 ## License  
-GPL License  
-(c) 2018 [YOPEY YOPEY LLC](https://yopeyopey.com/) by [David Figatner](https://twitter.com/yopey_yopey/)
+Released under GPL License.
