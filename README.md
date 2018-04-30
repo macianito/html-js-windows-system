@@ -51,4 +51,4 @@ This project started as an entertainment, feel free to download and use or fork!
 [http://phplandia.com/examples/Window/window.html](http://phplandia.com/examples/Window/window.html)
 
 ## License  
-Released under GPL License.
+Released under [GPL](https://www.gnu.org/licenses/gpl.html) License.
