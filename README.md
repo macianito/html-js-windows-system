@@ -4,9 +4,21 @@ A window manager written in Javascript, HTML5 and CSS3.
 
 This project started as an entertainment, feel free to download and use or fork!
 
-### Live Demo ###
+## Authors
+
+* **Ivan Macià** - *Initial work* - [http://mazius.org](http://mazius.org)
+
+### Live Example ###
 
 [http://phplandia.com/examples/Window/window.html](http://phplandia.com/examples/Window/window.html)
+
+## installation
+
+    <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/window.css" />
+    <script type="text/javascript" src="js/window.js"></script>
 
 ### Include ###
 
@@ -35,3 +47,9 @@ This project started as an entertainment, feel free to download and use or fork!
     win.setContentHtml('<h2>HTML Window Content</h2>);
 
 ```
+## API documentation
+[http://phplandia.com/examples/Window/window.html](http://phplandia.com/examples/Window/window.html)
+
+## License  
+GPL License  
+(c) 2018 [YOPEY YOPEY LLC](https://yopeyopey.com/) by [David Figatner](https://twitter.com/yopey_yopey/)
