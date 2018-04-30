@@ -11,3 +11,8 @@ Windows system
 
 * [jQuery](http://jquery.com/) small, and feature-rich JavaScript library
 * [Bootstrap](http://getbootstrap.com) toolkit for developing with HTML, CSS, and JS
+
+### Features ###
+
+* Create windows
+* Create overlays
