@@ -1,5 +1,5 @@
 /**
- * @file Create a Windows system
+ * @file wWndow manager
  * @see [Example]{@link http://example.com}
  * @author Mazius <ivanmaciagalan@gmail.com>
  * @version 0.1
@@ -9,7 +9,7 @@
 /** @global store window Objects */
 window.windowSystem = {}; // mirar fer objecte {}
 
-
+/** @global object constructor function of windows */
 this.Window = (function($) {
     'use strict';
 
@@ -177,7 +177,7 @@ this.Window = (function($) {
      *
      * @public
      *
-     * @param {boolean} draggable - is draggable
+     * @param {boolean} draggable - Set if the window is draggable
      *
      */
     Window.prototype.setDraggable = function(draggable) {
@@ -638,7 +638,7 @@ this.Window = (function($) {
      }
 
     /**
-     * Momerize coordinates of the window
+     * Memorize coordinates of the window
      *
      * @private
      *
@@ -755,7 +755,7 @@ this.Window = (function($) {
      *
      * @private
      *
-     * @param {object|jQuery object} element - Element over which to apply the new dimensions.
+     * @param {object|jQuery object} element - The dom element that you apply the dimensions to.
      * @param {object} box - Dimensions to apply.
      *
      */
