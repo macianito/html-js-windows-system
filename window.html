@@ -2,21 +2,22 @@
 <html>
   <head>
     <title>window</title>
-    
+
     <link id="bootstrap" rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />
-    
-    
+
+
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/window.css?v23" />
-    <script type="text/javascript" src="js/window.js?v23"></script>
+    <link rel="stylesheet" type="text/css" href="css/window.css?v21" />
+    <script type="text/javascript" src="js/window.js?v21"></script>
   </head>
   <body>
 
    <a href="javascript:createWindow()">Create Window</a> |
-   <a href="javascript:createWindowDimensions()">Create Window Default Dimensions</a> | 
+   <a href="javascript:createWindowDimensions()">Create Window Default Dimensions</a> |
    <a href="javascript:createOverlay()">Create Overlay</a> |
+   <a href="javascript:testWindows()">Test</a>
 
 
    <style>
@@ -98,6 +99,81 @@ function createWindowDimensions() {
   win.setContentHtml(opts.idWindow);
 
 }
+
+function testWindows(max) {
+
+
+ for(var i = 0; i < 50; i++) {
+
+    /*  setTimeout(function() {
+
+      var win =  $('<span>jjjjhjkhkkjhk</span>');
+      win.appendTo('body');
+
+      win[0].parentElement.removeChild(win[0]);
+
+      //win.remove();
+
+    }, i*200);  */
+
+
+
+    var opts = {
+      idWindow: '#window' + Math.floor((Math.random() * 30000) + 1),
+      position  : {top: 105 + Math.floor((Math.random() * 300) + 1), left: 300 + Math.floor((Math.random() * 200) + 1) },
+    };
+
+    //var win =  $('<span>jjjjhjkhkkjhk</span>');
+    //win.appendTo('body');
+    var win =  new Window(opts);
+
+    win.close();
+    win = null;
+
+    }
+
+  return;
+
+
+  var i   = 0,
+      max = max || 100;
+
+  var intv = setInterval(function() {
+
+    var opts = {
+      idWindow: '#window' + Math.floor((Math.random() * 30000) + 1),
+      position  : {top: 105 + Math.floor((Math.random() * 300) + 1), left: 300 + Math.floor((Math.random() * 200) + 1) },
+    };
+
+    //var win =  $('<span>jjjjhjkhkkjhk</span>');
+    //win.appendTo('body');
+    var win =  new Window(opts);
+
+
+
+
+    if(++i >= max) {
+      clearInterval(intv);
+      win.close();
+      //win.remove();
+      win = null;
+      return;
+    }
+
+    setTimeout(function() {
+
+      win.close();
+      //win.remove();
+      win = null;
+
+    }, 25);
+
+  }, 50);
+
+
+}
+
+
 
 </script>
 

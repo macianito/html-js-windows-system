@@ -318,7 +318,7 @@ this.Window = (function($) {
         }),
 
 
-        this.eventsHandlers.push({element: self.documentObject, handlerFunction: handler, eventType: 'mousemove'}),
+        this.eventsHandlers.push({element: self.documentObject[0], handlerFunction: handler, eventType: 'mousemove'}),
 
         Utils.attachEvent(self.windowButtonsObject[0], 'mousedown', handler = function(evt) {
 
@@ -326,7 +326,7 @@ this.Window = (function($) {
 
         }),
 
-        this.eventsHandlers.push({element: self.windowButtonsObject, handlerFunction: handler, eventType: 'mousedown'}),
+        this.eventsHandlers.push({element: self.windowButtonsObject[0], handlerFunction: handler, eventType: 'mousedown'}),
 
         Utils.attachEvent(self.barObject[0], 'mousedown', handler = function(evt) {
 
@@ -341,7 +341,7 @@ this.Window = (function($) {
 
         }),
 
-        this.eventsHandlers.push({element: self.barObject, handlerFunction: handler, eventType: 'mousedown'}),
+        this.eventsHandlers.push({element: self.barObject[0], handlerFunction: handler, eventType: 'mousedown'}),
 
         Utils.attachEvent(self.documentObject[0], 'mouseup', handler = function(evt) {
 
@@ -357,7 +357,7 @@ this.Window = (function($) {
 
         }),
 
-        this.eventsHandlers.push({element: self.documentObject, handlerFunction: handler, eventType: 'mouseup'}),
+        this.eventsHandlers.push({element: self.documentObject[0], handlerFunction: handler, eventType: 'mouseup'}),
 
         Utils.attachEvent(self.windowObject[0], 'mousemove', handler = function(evt) {
 
@@ -368,7 +368,7 @@ this.Window = (function($) {
 
         }),
 
-        this.eventsHandlers.push({element: self.windowObject, handlerFunction: handler, eventType: 'mousemove'}),
+        this.eventsHandlers.push({element: self.windowObject[0], handlerFunction: handler, eventType: 'mousemove'}),
 
         Utils.attachEvent(self.windowObject[0], 'mousedown', handler = function(evt) {
 
@@ -384,7 +384,7 @@ this.Window = (function($) {
 
         }),
 
-        this.eventsHandlers.push({element: self.windowObject, handlerFunction: handler, eventType: 'mousedown'}),
+        this.eventsHandlers.push({element: self.windowObject[0], handlerFunction: handler, eventType: 'mousedown'}),
 
         Utils.attachEvent(self.minimizeButton[0], 'click', handler = function(evt) {
 
@@ -415,7 +415,7 @@ this.Window = (function($) {
 
         }),
 
-        this.eventsHandlers.push({element: self.minimizeButton, handlerFunction: handler, eventType: 'click'}),
+        this.eventsHandlers.push({element: self.minimizeButton[0], handlerFunction: handler, eventType: 'click'}),
 
         Utils.attachEvent(self.maximizeButton[0], 'click', handler = function(evt) {
 
@@ -457,7 +457,7 @@ this.Window = (function($) {
 
         }),
 
-        this.eventsHandlers.push({element: self.maximizeButton, handlerFunction: handler, eventType: 'click'}),
+        this.eventsHandlers.push({element: self.maximizeButton[0], handlerFunction: handler, eventType: 'click'}),
 
         Utils.attachEvent(this.closeButton[0], 'click', handler = function(evt) {
 
@@ -465,7 +465,7 @@ this.Window = (function($) {
 
         }),
 
-        this.eventsHandlers.push({element: this.closeButton, handlerFunction: handler, eventType: 'click'});
+        this.eventsHandlers.push({element: this.closeButton[0], handlerFunction: handler, eventType: 'click'});
 
     }
 
@@ -481,7 +481,7 @@ this.Window = (function($) {
        // 1       detach events
        //         remove objects
 
-       for(var i in this.eventsHandlers) { // avoiding cyclic references
+       for(var i = 0; i < this.eventsHandlers.length; i++) { // avoiding cyclic references
 
          var element = Utils.isjQueryObject(this.eventsHandlers[i].element)
            ? this.eventsHandlers[i].element[0]
@@ -489,9 +489,36 @@ this.Window = (function($) {
 
          Utils.detachEvent(element, this.eventsHandlers[i].eventType, this.eventsHandlers[i].handlerFunction);
 
+         this.eventsHandlers[i].element = null;
+
+         delete this.eventsHandlers[i];
+
        }
 
+       //this.eventsHandlers.splice(0, this.eventsHandlers.length);
+       //this.eventsHandlers = null;
+
+       this.contentObject.remove();
+       this.contentObject = null;
+
+       // Remove elements
+       this.maximizeButton.remove();
+       this.maximizeButton = null;
+
+       this.minimizeButton.remove();
+       this.minimizeButton = null;
+
+       this.closeButton.remove();
+       this.closeButton = null;
+
+       this.windowButtonsObject.remove();
+       this.windowButtonsObject = null;
+
+       this.barObject.remove();
+       this.barObject = null;
+
        this.windowObject.remove();
+       this.windowObject = null;
 
        window.windowSystem[this.idWindow] = null;
        delete window.windowSystem[this.idWindow];
