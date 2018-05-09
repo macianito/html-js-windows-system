@@ -490,6 +490,7 @@ this.Window = (function($) {
          Utils.detachEvent(element, this.eventsHandlers[i].eventType, this.eventsHandlers[i].handlerFunction);
 
          this.eventsHandlers[i].element = null;
+         this.eventsHandlers[i].handlerFunction = null;
 
          delete this.eventsHandlers[i];
 
