@@ -346,7 +346,11 @@ this.Window = (function($) {
         Utils.attachEvent(self.documentObject[0], 'mouseup', handler = function(evt) {
 
           if(self.flags.barMouseDown) { // S'HA DE MIRAR NO SIGUI QUE SURT DELS LIMITS DEL DOC AMB MOUSEDOWN I NO FA RES
-            _storeCoordinates.call(self);
+
+            if(self.flags.minimized)
+             _storeMinimizedBox.call(self);
+            else
+             _storeBox.call(self);
           }
 
           // reinit flags and variables
@@ -555,12 +559,12 @@ this.Window = (function($) {
      }
 
    /**
-    * Store the coordinates of the window
+    * Store the minimized box
     *
     * @private
     *
     */
-    function _storeCoordinates() {
+    function _storeMinimizedBox() {
 
        var box = Utils.getBoxElement(this.windowObject[0]);
 
