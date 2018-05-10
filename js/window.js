@@ -57,7 +57,7 @@ this.Window = (function($) {
       this.memCoords         = null; // property to memorize coords
 
       this.box    = null;
-      this.boxMem = null; // aux variable to remember dimension box/window values values
+      this.boxMem = null; // aux variable to remember dimension box/window values
 
       this.idWindow = options.idWindow || '#window';
 
@@ -71,7 +71,7 @@ this.Window = (function($) {
 
       if(this.flags.modal) { // if true then create overlay
 
-      	_createOverlay(_id); // create html overlay
+        _createOverlay(_id); // create html overlay
 
         window.windowSystem['overlay'].show();
 
@@ -346,7 +346,7 @@ this.Window = (function($) {
         Utils.attachEvent(self.documentObject[0], 'mouseup', handler = function(evt) {
 
           if(self.flags.barMouseDown) { // S'HA DE MIRAR NO SIGUI QUE SURT DELS LIMITS DEL DOC AMB MOUSEDOWN I NO FA RES
-            _storeBox.call(self);
+            _storeCoordinates.call(self);
           }
 
           // reinit flags and variables
@@ -371,6 +371,7 @@ this.Window = (function($) {
         this.eventsHandlers.push({element: self.windowObject[0], handlerFunction: handler, eventType: 'mousemove'}),
 
         Utils.attachEvent(self.windowObject[0], 'mousedown', handler = function(evt) {
+
 
           _setFocus.call(self); //  set focus to this window
 
@@ -549,27 +550,24 @@ this.Window = (function($) {
     */
     function _storeBox() {
 
-        // when you minimizes window
-        // you have to store box in this way
-        if(this.flags.minimized) {
+       this.box = Utils.getBoxElement(this.windowObject[0]);
 
-          var boxMem      = Utils.getBoxElement(this.windowObject[0]);
+     }
 
-          this.box = {
-          	top    : boxMem.top,
-            left   : boxMem.left,
-            bottom : boxMem.top + this.box.height,
-            right  : boxMem.left + this.box.width,
-            width  : this.box.right - this.box.left,
-            height : this.box.bottom - this.box.top
-          };
+   /**
+    * Store the coordinates of the window
+    *
+    * @private
+    *
+    */
+    function _storeCoordinates() {
 
+       var box = Utils.getBoxElement(this.windowObject[0]);
 
-        } else {
-
-          this.box = Utils.getBoxElement(this.windowObject[0]);
-
-        }
+       this.box.top    = box.top;
+       this.box.left   = box.left;
+       this.box.bottom = box.top  + this.box.height;
+       this.box.right  = box.left + this.box.width;
 
      }
 
@@ -742,20 +740,20 @@ this.Window = (function($) {
      * @param {string} id - Id of the window.
      *
      */
-	 function _createWindow(id) {
+   function _createWindow(id) {
 
-	   $('<div id="' + id + '" class="window">' +
-	     '  <div class="bar">' +
-	     '    <div class="window-buttons">' +
-	     '      <span class="window-button minimize-button"></span>' +
-	     '      <span class="window-button maximize-button"></span>' +
-	     '      <span class="window-button close-button"></span>' +
-	     '    </div>' +
-	     '  </div>' +
-	     '  <div class="content"></div>' +
-	     '</div>').appendTo('body');
+     $('<div id="' + id + '" class="window">' +
+       '  <div class="bar">' +
+       '    <div class="window-buttons">' +
+       '      <span class="window-button minimize-button"></span>' +
+       '      <span class="window-button maximize-button"></span>' +
+       '      <span class="window-button close-button"></span>' +
+       '    </div>' +
+       '  </div>' +
+       '  <div class="content"></div>' +
+       '</div>').appendTo('body');
 
-	 }
+   }
 
     /**
      * Create html overlay
