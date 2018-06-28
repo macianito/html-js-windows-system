@@ -59,8 +59,14 @@ this.Window = (function($) {
       this.box    = null;
       this.boxMem = null; // aux variable to remember dimension box/window values
 
-      this.idWindow = options.idWindow || '#window';
+      if(options.idWindow && options.idWindow.charAt(0) != '#') {
+        options.idWindow = '#' + options.idWindow;
+      }
 
+      this.idWindow = options.idWindow
+        ? options.idWindow.charAt(0) != '#'
+          ? '#' + options.idWindow : options.idWindow
+        : '#window';
 
 
       var _id = this.idWindow.replace('#', ''); // set id
@@ -77,10 +83,13 @@ this.Window = (function($) {
 
       }
 
+      console.log($(this.idWindow), this.idWindow)
+
       this.documentObject = $(document);
       this.windowObject   = $(this.idWindow);
 
       this.barObject     = $(this.idWindow + ' .bar');
+      this.titleObject   = $(this.idWindow + ' .title');
       this.contentObject = $(this.idWindow + ' .content');
 
       this.windowButtonsObject = $(this.idWindow + ' .window-buttons');
@@ -133,7 +142,17 @@ this.Window = (function($) {
 
     /* Prototype functions
      ************************************/
-
+    /**
+     * Set the title content of the window.
+     *
+     * @public
+     *
+     * @param {string} html - content html.
+     *
+     */
+    Window.prototype.setTitle = function(title) {
+      this.titleObject.html(title);
+    };
 
     /**
      * Set the html content of the window.
@@ -156,7 +175,7 @@ this.Window = (function($) {
      *
      */
     Window.prototype.setContentIframe = function(url) {
-      this.contentObject.html('<iframe src="' + url + '"></iframe>');
+      this.contentObject.html('<iframe class="iframe-content" src="' + url + '"></iframe>');
     };
 
     /**
@@ -748,6 +767,7 @@ this.Window = (function($) {
 
      $('<div id="' + id + '" class="window">' +
        '  <div class="bar">' +
+       '    <span class="title">title</span>' +
        '    <div class="window-buttons">' +
        '      <span class="window-button minimize-button"></span>' +
        '      <span class="window-button maximize-button"></span>' +
