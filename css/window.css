@@ -27,7 +27,8 @@
    cursor: pointer;
  }
 
- .window.bar-mousedown:after { /* fix content iframe drag down */
+ .window.bar-mousedown:after, /* fix content iframe drag down */
+  .window.content-blocked:after { /* fix content iframe drag down */
     content: 'ff';
     position: absolute;
     color: transparent;

@@ -377,6 +377,8 @@ this.Window = (function($) {
           self.windowObject.removeClass('bar-mousedown');
 
           self.flags.resizing = false;
+          self.windowObject.removeClass('content-blocked'); // when resizing stop
+
           self.memCoords = null;
           self.boxMem = null;
 
@@ -404,6 +406,8 @@ this.Window = (function($) {
 
              _memCoordinates.call(self, evt);
              self.flags.resizing = true;
+             self.windowObject.addClass('content-blocked'); // when resizing start
+
 
              self.boxMem = Utils.cloneObject(self.box);
           }
