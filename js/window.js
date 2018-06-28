@@ -83,8 +83,6 @@ this.Window = (function($) {
 
       }
 
-      console.log($(this.idWindow), this.idWindow)
-
       this.documentObject = $(document);
       this.windowObject   = $(this.idWindow);
 
@@ -356,6 +354,8 @@ this.Window = (function($) {
           evt.stopPropagation();
 
           self.flags.barMouseDown = true;
+          self.windowObject.addClass('bar-mousedown');
+
           _memCoordinates.call(self, evt);
 
         }),
@@ -374,6 +374,8 @@ this.Window = (function($) {
 
           // reinit flags and variables
           self.flags.barMouseDown = false;
+          self.windowObject.removeClass('bar-mousedown');
+
           self.flags.resizing = false;
           self.memCoords = null;
           self.boxMem = null;
