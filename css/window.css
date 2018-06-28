@@ -28,7 +28,7 @@
  }
 
  .window.bar-mousedown:after { /* fix content iframe drag down */
-    content: 'div';
+    content: 'ff';
     position: absolute;
     color: transparent;
     left: 0;
