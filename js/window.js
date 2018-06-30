@@ -301,9 +301,9 @@ this.Window = (function($) {
               return;
             }
 
-            var coordsMouse = _getAbsoluteMousePosition(evt),
-                newLeft =  self.memCoords.left + (coordsMouse.x - self.memCoords.x),
-                newTop =  self.memCoords.top + (coordsMouse.y - self.memCoords.y),
+            var coordsMouse  = _getAbsoluteMousePosition(evt),
+                newLeft      =  self.memCoords.left + (coordsMouse.x - self.memCoords.x),
+                newTop       =  self.memCoords.top + (coordsMouse.y - self.memCoords.y),
                 windowHeight = $(window).height();
 
 
@@ -354,7 +354,7 @@ this.Window = (function($) {
           evt.stopPropagation();
 
           self.flags.barMouseDown = true;
-          self.windowObject.addClass('bar-mousedown');
+          self.windowObject.addClass('content-blocked');
 
           _memCoordinates.call(self, evt);
 
@@ -366,18 +366,20 @@ this.Window = (function($) {
 
           if(self.flags.barMouseDown) { // S'HA DE MIRAR NO SIGUI QUE SURT DELS LIMITS DEL DOC AMB MOUSEDOWN I NO FA RES
 
+
+            // stores current dimensions when ends action over window
             if(self.flags.minimized)
              _storeMinimizedBox.call(self);
-            else
+            else if(!self.flags.maximized) // except when window is maximized
              _storeBox.call(self);
+
           }
 
           // reinit flags and variables
           self.flags.barMouseDown = false;
-          self.windowObject.removeClass('bar-mousedown');
 
           self.flags.resizing = false;
-          self.windowObject.removeClass('content-blocked'); // when resizing stop
+          self.windowObject.removeClass('content-blocked'); // when action over window
 
           self.memCoords = null;
           self.boxMem = null;
