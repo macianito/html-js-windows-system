@@ -83,6 +83,9 @@ this.Window = (function($) {
 
       }
 
+      _createMovementOverlay(_id);
+
+
       this.documentObject = $(document);
       this.windowObject   = $(this.idWindow);
 
@@ -355,6 +358,7 @@ this.Window = (function($) {
 
           self.flags.barMouseDown = true;
           self.windowObject.addClass('content-blocked');
+          window.windowSystem['movement-overlay'].show();
 
           _memCoordinates.call(self, evt);
 
@@ -380,6 +384,7 @@ this.Window = (function($) {
 
           self.flags.resizing = false;
           self.windowObject.removeClass('content-blocked'); // when action over window
+          window.windowSystem['movement-overlay'].hide();
 
           self.memCoords = null;
           self.boxMem = null;
@@ -689,6 +694,9 @@ this.Window = (function($) {
           break;
         }
 
+
+
+
         _setCssDimensionsElement(this.windowObject, this.box);
 
 
@@ -722,29 +730,29 @@ this.Window = (function($) {
         var mouse = _getMousePosition(object, evt);
 
 
-        if(mouse.x < this.box.left + 10) { // left
+        if(mouse.x < this.box.left + 17) { // left
 
-           if(mouse.y < this.box.top + 10) {
+           if(mouse.y < this.box.top + 17) {
              this.mouseZonePosition = 'top-left';
-           } else if(mouse.y > this.box.bottom - 10) {
+           } else if(mouse.y > this.box.bottom - 17) {
              this.mouseZonePosition = 'bottom-left';
            } else {
              this.mouseZonePosition = 'left';
            }
 
-        } else if(mouse.x > this.box.right - 10) { // right
+        } else if(mouse.x > this.box.right - 17) { // right
 
-           if(mouse.y < this.box.top + 10) {
+           if(mouse.y < this.box.top + 17) {
              this.mouseZonePosition = 'top-right';
-           } else if(mouse.y > this.box.bottom - 10) {
+           } else if(mouse.y > this.box.bottom - 17) {
              this.mouseZonePosition = 'bottom-right';
            } else {
              this.mouseZonePosition = 'right';
            }
 
-        } else if(mouse.y < this.box.top + 10) { // top
+        } else if(mouse.y < this.box.top + 17) { // top
           this.mouseZonePosition = 'top';
-        } else if(mouse.y > this.box.bottom - 10) { // bottom
+        } else if(mouse.y > this.box.bottom - 17) { // bottom
           this.mouseZonePosition = 'bottom';
         } else {
           this.mouseZonePosition = 'center';
@@ -806,6 +814,27 @@ this.Window = (function($) {
        }
 
      }
+
+    /**
+     * Create html movement overlay to avoid problems with some elements while dragging
+     *
+     * @private
+     *
+     * @param {string} id - Id of the movement overlay.
+     *
+     */
+     function _createMovementOverlay(id) {
+
+       if($('.window-movement-overlay').length === 0) {
+
+         window.windowSystem['movement-overlay'] = $('<div id="' + id + '-movement-overlay" class="window-movement-overlay"></div>');
+
+         window.windowSystem['movement-overlay'].appendTo('body');
+
+       }
+
+     }
+
 
 
     /**
