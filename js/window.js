@@ -69,7 +69,7 @@ this.Window = (function($) {
         : '#window';
 
 
-      var _id = this.idWindow.replace('#', ''); // set id
+      var _id = this.idWindow.replace('#', ''); // set id - !!!!! must be unique
 
       _createWindow(_id); // create html window
 
@@ -414,6 +414,7 @@ this.Window = (function($) {
              _memCoordinates.call(self, evt);
              self.flags.resizing = true;
              self.windowObject.addClass('content-blocked'); // when resizing start
+             window.windowSystem['movement-overlay'].show();
 
 
              self.boxMem = Utils.cloneObject(self.box);
