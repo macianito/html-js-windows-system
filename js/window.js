@@ -257,6 +257,8 @@ this.Window = (function($) {
         left: position.left + 'px'
       });
 
+      _storeBox.call(this);
+
    };
 
   /**
@@ -273,6 +275,8 @@ this.Window = (function($) {
         width  : dimensions.width + 'px',
         height : dimensions.height + 'px'
       });
+
+      _storeBox.call(this);
 
    };
 
