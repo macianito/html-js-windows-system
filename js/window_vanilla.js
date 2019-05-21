@@ -79,33 +79,37 @@ this.Window = (function($) {
 
         _createOverlay(this.id); // create html overlay
 
-        window.windowSystem['overlay'].show();
+        window.windowSystem['overlay'].style.display = 'block';
 
       }
 
       _createMovementOverlay(this.id);
 
 
-      this.documentObject = $(document);
-      this.windowObject   = $(this.idWindow);
+      this.documentObject = document;
+      this.windowObject   = document.getElementById(this.id);
 
-      this.barObject     = $(this.idWindow + ' .bar');
-      this.titleObject   = $(this.idWindow + ' .title');
-      this.contentObject = $(this.idWindow + ' .content');
+      this.barObject = document.querySelectorAll(this.idWindow + ' .bar')[0];
 
-      this.windowButtonsObject = $(this.idWindow + ' .window-buttons');
+
+      this.titleObject   = document.querySelectorAll(this.idWindow + ' .title')[0];
+      this.contentObject = document.querySelectorAll(this.idWindow + ' .content')[0];
+
+      this.windowButtonsObject = document.querySelectorAll(this.idWindow + ' .window-buttons')[0];
 
       // Setup jquery objects Window Buttons
-      this.maximizeButton = $(this.idWindow + ' .maximize-button'),
-      this.minimizeButton = $(this.idWindow + ' .minimize-button'),
-      this.closeButton    = $(this.idWindow + ' .close-button'),
+      this.maximizeButton = document.querySelectorAll(this.idWindow + ' .maximize-button')[0],
+
+
+      this.minimizeButton = document.querySelectorAll(this.idWindow + ' .minimize-button')[0],
+      this.closeButton    = document.querySelectorAll(this.idWindow + ' .close-button')[0],
 
       this.barSize        = options.barSize || 27; // set bar size
 
-      this.contentObject.css('padding-top', (this.barSize + 5) + 'px'); // 5px to separate bar from content top
+      this.contentObject.style.paddingTop =  (this.barSize + 5) + 'px'; // 5px to separate bar from content top
 
 
-      this.minimizedWidth  = this.windowObject.width(); // set width when the window is minimized
+      this.minimizedWidth  = Utils.getBoxElement(this.windowObject).width; // set width when the window is minimized
       this.minimizedHeight = this.barSize; // set width when the window is minimized
 
       this.flags.draggable = (options.draggable === false) ? false : true; // set if window is draggable
@@ -152,7 +156,7 @@ this.Window = (function($) {
      *
      */
     Window.prototype.setTitle = function(title) {
-      this.titleObject.html(title);
+      this.titleObject.innerHTML = title;
     };
 
     /**
@@ -164,7 +168,7 @@ this.Window = (function($) {
      *
      */
     Window.prototype.setContentHtml = function(html) {
-      this.contentObject.html(html);
+      this.contentObject.innerHTML = html;
     };
 
     /**
@@ -176,7 +180,7 @@ this.Window = (function($) {
      *
      */
     Window.prototype.setContentIframe = function(url) {
-      this.contentObject.html('<iframe id="iframe-' + this.id + '" class="iframe-content" src="' + url + '"></iframe>');
+      this.contentObject.innerHTML = '<iframe id="iframe-' + this.id + '" class="iframe-content" src="' + url + '"></iframe>';
     };
 
     /**
@@ -188,7 +192,7 @@ this.Window = (function($) {
      *
      */
     Window.prototype.setContentFromObject = function(id) {
-      this.contentObject.html($(id).html());
+      this.contentObject.innerHTML = document.getElementById(id.replace('#', '')).innerHTML;
     };
 
 
@@ -215,7 +219,7 @@ this.Window = (function($) {
       this.onClose();
 
       if(this.flags.modal) {
-        window.windowSystem['overlay'].hide();
+        window.windowSystem['overlay'].style.display = 'none';
       }
 
       _destroy.call(this);
@@ -229,7 +233,7 @@ this.Window = (function($) {
      *
      */
     Window.prototype.hide = function() {
-      this.windowObject.hide();
+      this.windowObject.style.display = 'none';
     };
 
     /**
@@ -239,7 +243,7 @@ this.Window = (function($) {
      *
      */
     Window.prototype.show = function() {
-      this.windowObject.show();
+      this.windowObject.style.display = 'block';
     };
 
    /**
@@ -252,10 +256,8 @@ this.Window = (function($) {
     */
     Window.prototype.setPosition = function(position) {
 
-      this.windowObject.css({
-        top: position.top + 'px',
-        left: position.left + 'px'
-      });
+      this.windowObject.style.top  = position.top + 'px';
+      this.windowObject.style.left = position.left + 'px';
 
       _storeBox.call(this);
 
@@ -271,10 +273,8 @@ this.Window = (function($) {
    */
    Window.prototype.setDimensions = function(dimensions) {
 
-      this.windowObject.css({
-        width  : dimensions.width + 'px',
-        height : dimensions.height + 'px'
-      });
+      this.windowObject.style.width  = dimensions.width + 'px';
+      this.windowObject.style.height = dimensions.height + 'px';
 
       _storeBox.call(this);
 
@@ -300,7 +300,7 @@ this.Window = (function($) {
         var self = this,
             handler = null;
 
-        Utils.attachEvent(self.documentObject[0], 'mousemove', handler = function(evt) {
+        Utils.attachEvent(self.documentObject, 'mousemove', handler = function(evt) {
 
           if(self.flags.barMouseDown) {
 
@@ -309,9 +309,9 @@ this.Window = (function($) {
             }
 
             var coordsMouse  = _getAbsoluteMousePosition(evt),
-                newLeft      =  self.memCoords.left + (coordsMouse.x - self.memCoords.x),
-                newTop       =  self.memCoords.top + (coordsMouse.y - self.memCoords.y),
-                windowHeight = $(window).height();
+                newLeft      = self.memCoords.left + (coordsMouse.x - self.memCoords.x),
+                newTop       = self.memCoords.top + (coordsMouse.y - self.memCoords.y),
+                windowHeight = window.innerHeight;
 
 
             if(newTop <= 0) {
@@ -324,7 +324,8 @@ this.Window = (function($) {
 
             }
 
-            self.windowObject.css({top: newTop, left: newLeft});
+            self.windowObject.style.top  =  newTop + 'px';
+            self.windowObject.style.left =  newLeft + 'px';
 
           } else if(self.flags.resizing) {
 
@@ -342,17 +343,18 @@ this.Window = (function($) {
         }),
 
 
-        this.eventsHandlers.push({element: self.documentObject[0], handlerFunction: handler, eventType: 'mousemove'}),
+        this.eventsHandlers.push({element: self.documentObject, handlerFunction: handler, eventType: 'mousemove'}),
 
-        Utils.attachEvent(self.windowButtonsObject[0], 'mousedown', handler = function(evt) {
+        Utils.attachEvent(self.windowButtonsObject, 'mousedown', handler = function(evt) {
 
           evt.stopPropagation(); // Avoid propagation
 
         }),
 
-        this.eventsHandlers.push({element: self.windowButtonsObject[0], handlerFunction: handler, eventType: 'mousedown'}),
+        this.eventsHandlers.push({element: self.windowButtonsObject, handlerFunction: handler, eventType: 'mousedown'}),
 
-        Utils.attachEvent(self.barObject[0], 'mousedown', handler = function(evt) {
+        Utils.attachEvent(self.barObject, 'mousedown', handler = function(evt) {
+
 
           evt.preventDefault();
 
@@ -361,16 +363,16 @@ this.Window = (function($) {
           evt.stopPropagation();
 
           self.flags.barMouseDown = true;
-          self.windowObject.addClass('content-blocked');
-          window.windowSystem['movement-overlay'].show();
+          self.windowObject.classList.add('content-blocked');
+          window.windowSystem['movement-overlay'].style.display = 'block';
 
           _memCoordinates.call(self, evt);
 
         }),
 
-        this.eventsHandlers.push({element: self.barObject[0], handlerFunction: handler, eventType: 'mousedown'}),
+        this.eventsHandlers.push({element: self.barObject, handlerFunction: handler, eventType: 'mousedown'}),
 
-        Utils.attachEvent(self.documentObject[0], 'mouseup', handler = function(evt) {
+        Utils.attachEvent(self.documentObject, 'mouseup', handler = function(evt) {
 
           if(self.flags.barMouseDown) { // S'HA DE MIRAR NO SIGUI QUE SURT DELS LIMITS DEL DOC AMB MOUSEDOWN I NO FA RES
 
@@ -387,28 +389,28 @@ this.Window = (function($) {
           self.flags.barMouseDown = false;
 
           self.flags.resizing = false;
-          self.windowObject.removeClass('content-blocked'); // when action over window
-          window.windowSystem['movement-overlay'].hide();
+          self.windowObject.classList.remove('content-blocked'); // when action over window
+          window.windowSystem['movement-overlay'].style.display = 'none';
 
           self.memCoords = null;
           self.boxMem = null;
 
         }),
 
-        this.eventsHandlers.push({element: self.documentObject[0], handlerFunction: handler, eventType: 'mouseup'}),
+        this.eventsHandlers.push({element: self.documentObject, handlerFunction: handler, eventType: 'mouseup'}),
 
-        Utils.attachEvent(self.windowObject[0], 'mousemove', handler = function(evt) {
+        Utils.attachEvent(self.windowObject, 'mousemove', handler = function(evt) {
 
           if(!self.flags.resizing) { // XXX
             _setMouseZonePosition.call(self, this, evt);
-            _changeCursor.call(self);
+            _changeCursor.call(self, boxCursors[self.mouseZonePosition]);
           }
 
         }),
 
-        this.eventsHandlers.push({element: self.windowObject[0], handlerFunction: handler, eventType: 'mousemove'}),
+        this.eventsHandlers.push({element: self.windowObject, handlerFunction: handler, eventType: 'mousemove'}),
 
-        Utils.attachEvent(self.windowObject[0], 'mousedown', handler = function(evt) {
+        Utils.attachEvent(self.windowObject, 'mousedown', handler = function(evt) {
 
 
           _setFocus.call(self); //  set focus to this window
@@ -417,8 +419,8 @@ this.Window = (function($) {
 
              _memCoordinates.call(self, evt);
              self.flags.resizing = true;
-             self.windowObject.addClass('content-blocked'); // when resizing start
-             window.windowSystem['movement-overlay'].show();
+             self.windowObject.classList.add('content-blocked'); // when resizing start
+             window.windowSystem['movement-overlay'].style.display = 'block';
 
 
              self.boxMem = Utils.cloneObject(self.box);
@@ -426,9 +428,9 @@ this.Window = (function($) {
 
         }),
 
-        this.eventsHandlers.push({element: self.windowObject[0], handlerFunction: handler, eventType: 'mousedown'}),
+        this.eventsHandlers.push({element: self.windowObject, handlerFunction: handler, eventType: 'mousedown'}),
 
-        Utils.attachEvent(self.minimizeButton[0], 'click', handler = function(evt) {
+        Utils.attachEvent(self.minimizeButton, 'click', handler = function(evt) {
 
             evt.stopPropagation();
 
@@ -438,48 +440,50 @@ this.Window = (function($) {
            if(!self.flags.maximized)
              _storeBox.call(self);
 
-            _minimizeWindow.call(self);
+             _minimizeWindow.call(self);
 
-            self.maximizeButton.removeClass('maximize-button restore-button');
+             self.maximizeButton.classList.remove("maximize-button");
+             self.maximizeButton.classList.remove("restore-button");
 
 
-            if(self.flags.maximized) {
+           if(self.flags.maximized) {
 
-              self.maximizeButton.addClass('maximize-button');
+             self.maximizeButton.classList.add("maximize-button");
 
-            } else {
+           } else {
 
-              self.maximizeButton.addClass('restore-button');
+             self.maximizeButton.classList.add("restore-button");
 
-            }
+           }
 
-             self.flags.minimized = true;
+           self.flags.minimized = true;
 
         }),
 
-        this.eventsHandlers.push({element: self.minimizeButton[0], handlerFunction: handler, eventType: 'click'}),
+        this.eventsHandlers.push({element: self.minimizeButton, handlerFunction: handler, eventType: 'click'}),
 
-        Utils.attachEvent(self.maximizeButton[0], 'click', handler = function(evt) {
+        Utils.attachEvent(self.maximizeButton, 'click', handler = function(evt) {
 
            evt.stopPropagation();
 
-           self.maximizeButton.removeClass('maximize-button restore-button');
+           self.maximizeButton.classList.remove("maximize-button");
+           self.maximizeButton.classList.remove("restore-button");
 
            if(self.flags.minimized && !self.flags.maximized) { // state: minimized from a normal window
 
-             self.maximizeButton.addClass('maximize-button');
+             self.maximizeButton.classList.add("maximize-button");
 
              _restoreWindow.call(self);
 
            } else if(self.flags.minimized && self.flags.maximized) { // state: minimized from a maximized window
 
-             self.maximizeButton.addClass('restore-button');
+             self.maximizeButton.classList.add("restore-button");
 
              _maximizeWindow.call(self);
 
            } else if(self.flags.maximized) { // normal window from maximized window
 
-             self.maximizeButton.addClass('maximize-button');
+             self.maximizeButton.classList.add("maximize-button");
 
              self.flags.maximized = false;
 
@@ -487,7 +491,7 @@ this.Window = (function($) {
 
            } else { // normal window to maximize
 
-             self.maximizeButton.addClass('restore-button');
+             self.maximizeButton.classList.add("restore-button");
 
              self.flags.maximized = true;
 
@@ -499,15 +503,15 @@ this.Window = (function($) {
 
         }),
 
-        this.eventsHandlers.push({element: self.maximizeButton[0], handlerFunction: handler, eventType: 'click'}),
+        this.eventsHandlers.push({element: self.maximizeButton, handlerFunction: handler, eventType: 'click'}),
 
-        Utils.attachEvent(this.closeButton[0], 'click', handler = function(evt) {
+        Utils.attachEvent(this.closeButton, 'click', handler = function(evt) {
 
            self.close();
 
         }),
 
-        this.eventsHandlers.push({element: this.closeButton[0], handlerFunction: handler, eventType: 'click'});
+        this.eventsHandlers.push({element: this.closeButton, handlerFunction: handler, eventType: 'click'});
 
     }
 
@@ -577,8 +581,12 @@ this.Window = (function($) {
     */
     function _setFocus() {
 
-      $('.window').removeClass('window-focused');
-      this.windowObject.addClass('window-focused');
+      var ws = document.querySelectorAll('.window');
+      for(var i = 0; i < ws.length; i++) {
+        ws[i].classList.remove('window-focused');
+      }
+
+      this.windowObject.classList.add('window-focused');
 
     }
 
@@ -591,7 +599,7 @@ this.Window = (function($) {
     */
     function _storeBox() {
 
-       this.box = Utils.getBoxElement(this.windowObject[0]);
+       this.box = Utils.getBoxElement(this.windowObject);
 
      }
 
@@ -603,7 +611,7 @@ this.Window = (function($) {
     */
     function _storeMinimizedBox() {
 
-       var box = Utils.getBoxElement(this.windowObject[0]);
+       var box = Utils.getBoxElement(this.windowObject);
 
        this.box.top    = box.top;
        this.box.left   = box.left;
@@ -621,12 +629,10 @@ this.Window = (function($) {
      */
      function _minimizeWindow() {
 
-       this.windowObject.css({
-         top    : this.box.top + 'px',
-         left   : this.box.left + 'px',
-         width  : this.minimizedWidth + 'px', // this.box.width
-         height : this.minimizedHeight + 'px'
-       });
+       this.windowObject.style.top    = this.box.top + 'px';
+       this.windowObject.style.left   = this.box.left + 'px';
+       this.windowObject.style.width  = this.minimizedWidth + 'px';
+       this.windowObject.style.height = this.minimizedHeight + 'px';
      }
 
 
@@ -638,12 +644,10 @@ this.Window = (function($) {
      */
      function _maximizeWindow() {
 
-       this.windowObject.css({
-         top    : '0px',
-         left   : '0px',
-         width  : $(window).width(),
-         height : $(window).width()
-       });
+       this.windowObject.style.top    = 0;
+       this.windowObject.style.left   = 0;
+       this.windowObject.style.width  = '100%';
+       this.windowObject.style.height = window.innerHeight + 'px';
 
      }
 
@@ -717,9 +721,9 @@ this.Window = (function($) {
 
        this.memCoords = _getAbsoluteMousePosition(evt);
 
-       var windowPosition = this.windowObject.position();
+       var windowPosition = Utils.getBoxElement(this.windowObject);
 
-       this.memCoords.top = windowPosition.top,
+       this.memCoords.top  = windowPosition.top,
        this.memCoords.left = windowPosition.left;
 
      }
@@ -772,8 +776,8 @@ this.Window = (function($) {
      * @private
      *
      */
-     function _changeCursor() {
-       this.windowObject.css('cursor', boxCursors[this.mouseZonePosition]);
+     function _changeCursor(cursor) {
+       this.windowObject.style.cursor = cursor;
      }
 
     /**
@@ -786,17 +790,27 @@ this.Window = (function($) {
      */
    function _createWindow(id) {
 
-     $('<div id="' + id + '" class="window">' +
-       '  <div class="bar">' +
-       '    <span class="title">title</span>' +
-       '    <div class="window-buttons">' +
-       '      <span class="window-button minimize-button"></span>' +
-       '      <span class="window-button maximize-button"></span>' +
-       '      <span class="window-button close-button"></span>' +
-       '    </div>' +
-       '  </div>' +
-       '  <div class="content"></div>' +
-       '</div>').appendTo('body');
+    var wstr = '<div class="bar">' +
+               '  <span class="title">title</span>' +
+               '  <div class="window-buttons">' +
+               '    <span class="window-button minimize-button"></span>' +
+               '    <span class="window-button maximize-button"></span>' +
+               '    <span class="window-button close-button"></span>' +
+               '  </div>' +
+               '</div>' +
+               '<div class="content"></div>';
+
+    var node = document.createElement("DIV");
+
+    node.id = id;
+
+    node.className = 'window';
+
+    node.innerHTML = wstr;
+
+    document.querySelectorAll("body")[0].appendChild(node);
+
+
 
    }
 
@@ -810,11 +824,13 @@ this.Window = (function($) {
      */
      function _createOverlay(id) {
 
-       if($('.window-overlay').size() === 0) {
+       if(document.querySelectorAll(".window-overlay").length === 0) {
 
-         window.windowSystem['overlay'] = $('<div id="' + id + '-overlay" class="window-overlay"></div>');
+         //window.windowSystem['overlay'] = $('<div id="' + id + '-overlay" class="window-overlay"></div>');
 
-         window.windowSystem['overlay'].appendTo('body');
+         window.windowSystem['overlay'] = _createElement({id : id, _class : 'window-overlay'});
+
+         document.querySelectorAll("body")[0].appendChild(window.windowSystem['overlay']);
 
        }
 
@@ -830,13 +846,37 @@ this.Window = (function($) {
      */
      function _createMovementOverlay(id) {
 
-       if($('.window-movement-overlay').length === 0) {
+       if(document.querySelectorAll(".window-movement-overlay").length === 0) {
 
-         window.windowSystem['movement-overlay'] = $('<div id="' + id + '-movement-overlay" class="window-movement-overlay"></div>');
+         //window.windowSystem['movement-overlay'] = $('<div id="' + id + '-movement-overlay" class="window-movement-overlay"></div>');
 
-         window.windowSystem['movement-overlay'].appendTo('body');
+         window.windowSystem['movement-overlay'] = _createElement({id : id, _class : 'movement-overlay'});
+
+         document.querySelectorAll("body")[0].appendChild(window.windowSystem['movement-overlay']);
 
        }
+
+     }
+
+     /**
+     * Create div object
+     *
+     * @private
+     *
+     * @param {string} id - Id of the movement overlay.
+     *
+     */
+     function _createElement(params) {
+
+       var node = document.createElement((typeof params.type !== 'undefined') ? params.type : "DIV");
+
+       node.id = (typeof params.id !== 'undefined') ? params.id : '';
+
+       node.className = (typeof params._class !== 'undefined') ? params._class : '';
+
+       node.innerHTML = (typeof params.html !== 'undefined') ? params.html : '';
+
+       return node;
 
      }
 
@@ -853,12 +893,10 @@ this.Window = (function($) {
      */
      function _setCssDimensionsElement(element, box) {
 
-        Utils.getjQueryObject(element).css({
-          top    : box.top + 'px',
-          left   : box.left + 'px',
-          width  : (box.right - box.left) + 'px',
-          height : (box.bottom - box.top) + 'px'
-        });
+          element.style.top    = box.top + 'px';
+          element.style.left   = box.left + 'px';
+          element.style.width  = (box.right - box.left) + 'px';
+          element.style.height = (box.bottom - box.top) + 'px';
 
      }
 
