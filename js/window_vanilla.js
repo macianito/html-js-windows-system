@@ -246,14 +246,14 @@ this.Window = (function($) {
       this.windowObject.style.display = 'block';
     };
 
-   /**
-    * Set the position of the window.
-    *
-    * @public
-    *
-    * @param {Object} position - coords of the window
-    *
-    */
+    /**
+     * Set the position of the window.
+     *
+     * @public
+     *
+     * @param {Object} position - coords of the window
+     *
+     */
     Window.prototype.setPosition = function(position) {
 
       this.windowObject.style.top  = position.top + 'px';
@@ -261,24 +261,48 @@ this.Window = (function($) {
 
       _storeBox.call(this);
 
-   };
+    };
 
-  /**
-   * Set the dimensions of the window.
-   *
-   * @public
-   *
-   * @param {Object} position - dimensions: width and height
-   *
-   */
-   Window.prototype.setDimensions = function(dimensions) {
+    /**
+     * Set the dimensions of the window.
+     *
+     * @public
+     *
+     * @param {Object} position - dimensions: width and height
+     *
+     */
+    Window.prototype.setDimensions = function(dimensions) {
 
       this.windowObject.style.width  = dimensions.width + 'px';
       this.windowObject.style.height = dimensions.height + 'px';
 
       _storeBox.call(this);
 
-   };
+    };
+
+    /**
+     * Maximize window.
+     *
+     * @public
+     *
+     */
+    Window.prototype.maximize = function() {
+
+      _maximizeWindow.call(this);
+
+    };
+   
+    /**
+     * Minimize window.
+     *
+     * @public
+     *
+     */
+     Window.prototype.minimize = function() {
+
+      _minimizeWindow.call(this);
+
+    };
 
 
     return Window; // return class after create prototype functions
