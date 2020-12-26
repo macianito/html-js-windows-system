@@ -739,29 +739,29 @@ this.Window = (function($) {
         var mouse = _getMousePosition(object, evt);
 
 
-        if(mouse.x < this.box.left + 17) { // left
+        if(mouse.x < this.box.left + this.barSize) { // left
 
-           if(mouse.y < this.box.top + 17) {
+           if(mouse.y < this.box.top + this.barSize) {
              this.mouseZonePosition = 'top-left';
-           } else if(mouse.y > this.box.bottom - 17) {
+           } else if(mouse.y > this.box.bottom - this.barSize) {
              this.mouseZonePosition = 'bottom-left';
            } else {
              this.mouseZonePosition = 'left';
            }
 
-        } else if(mouse.x > this.box.right - 17) { // right
+        } else if(mouse.x > this.box.right - this.barSize) { // right
 
-           if(mouse.y < this.box.top + 17) {
+           if(mouse.y < this.box.top + this.barSize) {
              this.mouseZonePosition = 'top-right';
-           } else if(mouse.y > this.box.bottom - 17) {
+           } else if(mouse.y > this.box.bottom - this.barSize) {
              this.mouseZonePosition = 'bottom-right';
            } else {
              this.mouseZonePosition = 'right';
            }
 
-        } else if(mouse.y < this.box.top + 17) { // top
+        } else if(mouse.y < this.box.top + this.barSize) { // top
           this.mouseZonePosition = 'top';
-        } else if(mouse.y > this.box.bottom - 17) { // bottom
+        } else if(mouse.y > this.box.bottom - this.barSize) { // bottom
           this.mouseZonePosition = 'bottom';
         } else {
           this.mouseZonePosition = 'center';
