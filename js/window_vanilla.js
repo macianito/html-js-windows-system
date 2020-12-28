@@ -874,7 +874,7 @@ this.Window = (function($) {
 
          //window.windowSystem['movement-overlay'] = $('<div id="' + id + '-movement-overlay" class="window-movement-overlay"></div>');
 
-         window.windowSystem['movement-overlay'] = _createElement({id : id, _class : 'movement-overlay'});
+         window.windowSystem['movement-overlay'] = _createElement({id : id, _class : 'window-movement-overlay'});
 
          document.querySelectorAll("body")[0].appendChild(window.windowSystem['movement-overlay']);
 
