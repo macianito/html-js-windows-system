@@ -105,6 +105,8 @@ this.Window = (function($) {
       this.closeButton    = document.querySelectorAll(this.idWindow + ' .close-button')[0],
 
       this.barSize        = options.barSize || 27; // set bar size
+	  
+	  this.winMinHeight   = options.minHeight || 70; // window minimal height 
 
       this.contentObject.style.paddingTop =  (this.barSize + 5) + 'px'; // 5px to separate bar from content top
 
@@ -695,6 +697,11 @@ this.Window = (function($) {
      *
      */
      function _resizeWindow(mouseZonePosition, vectorResize) {
+		 
+		if((this.box.top + this.winMinHeight) > (this.box.bottom) && vectorResize.y <= 0) { // set minimal height
+		  return;
+		} 
+		 
 
         switch(mouseZonePosition) {
           case 'left':
@@ -726,8 +733,6 @@ this.Window = (function($) {
             this.box.bottom = this.boxMem.bottom + vectorResize.y;
           break;
         }
-
-
 
 
         _setCssDimensionsElement(this.windowObject, this.box);
