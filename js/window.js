@@ -100,7 +100,7 @@ this.Window = (function($) {
       this.minimizeButton = $(this.idWindow + ' .minimize-button'),
       this.closeButton    = $(this.idWindow + ' .close-button'),
 
-      this.barSize        = options.barSize || 27; // set bar size
+      this.barSize        = options.barSize || 37; // set bar size
 	  
 	  this.winMinHeight   = options.minHeight || 70; // window minimal height 
 
@@ -330,7 +330,7 @@ this.Window = (function($) {
 
           if(self.flags.barMouseDown) {
 
-            if(!self.flags.draggable) {
+            if(!self.flags.draggable || self.flags.maximized) {
               return;
             }
 
@@ -395,6 +395,21 @@ this.Window = (function($) {
         }),
 
         this.eventsHandlers.push({element: self.barObject[0], handlerFunction: handler, eventType: 'mousedown'}),
+		
+		Utils.attachEvent(self.barObject[0], 'dblclick', handler = function(evt) {
+
+
+          evt.preventDefault();
+		  evt.stopPropagation();
+
+          _setFocus.call(self);
+          
+		  if(!self.flags.maximized)
+            self.maximizeButton.trigger('click');
+
+        }),
+
+        this.eventsHandlers.push({element: self.barObject[0], handlerFunction: handler, eventType: 'dblclick'}),
 
         Utils.attachEvent(self.documentObject[0], 'mouseup', handler = function(evt) {
 
@@ -439,7 +454,7 @@ this.Window = (function($) {
 
           _setFocus.call(self); //  set focus to this window
 
-          if(self.mouseZonePosition !== 'center') { // if resize zone
+          if(self.mouseZonePosition !== 'center' && !self.flags.maximized) { // if resize zone and not maximized 
 
              _memCoordinates.call(self, evt);
              self.flags.resizing = true;
