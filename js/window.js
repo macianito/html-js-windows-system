@@ -379,6 +379,9 @@ this.Window = (function($) {
         this.eventsHandlers.push({element: self.windowButtonsObject[0], handlerFunction: handler, eventType: 'mousedown'}),
 
         Utils.attachEvent(self.barObject[0], 'mousedown', handler = function(evt) {
+			
+		  if(self.mouseZonePosition !== 'center')
+			return true;
 
           evt.preventDefault();
 
@@ -403,9 +406,8 @@ this.Window = (function($) {
 		  evt.stopPropagation();
 
           _setFocus.call(self);
-          
-		  if(!self.flags.maximized)
-            self.maximizeButton.trigger('click');
+
+          self.maximizeButton.trigger('click');
 
         }),
 
@@ -780,9 +782,9 @@ this.Window = (function($) {
         var mouse = _getMousePosition(object, evt);
 
 
-        if(mouse.x < this.box.left + this.barSize) { // left
+        if(mouse.x < this.box.left + 7) { // left
 
-           if(mouse.y < this.box.top + this.barSize) {
+           if(mouse.y < this.box.top + (this.barSize / 7)) {
              this.mouseZonePosition = 'top-left';
            } else if(mouse.y > this.box.bottom - this.barSize) {
              this.mouseZonePosition = 'bottom-left';
@@ -790,9 +792,9 @@ this.Window = (function($) {
              this.mouseZonePosition = 'left';
            }
 
-        } else if(mouse.x > this.box.right - this.barSize) { // right
+        } else if(mouse.x > this.box.right - 7) { // right
 
-           if(mouse.y < this.box.top + this.barSize) {
+           if(mouse.y < this.box.top + (this.barSize / 7)) {
              this.mouseZonePosition = 'top-right';
            } else if(mouse.y > this.box.bottom - this.barSize) {
              this.mouseZonePosition = 'bottom-right';
@@ -800,7 +802,7 @@ this.Window = (function($) {
              this.mouseZonePosition = 'right';
            }
 
-        } else if(mouse.y < this.box.top + this.barSize) { // top
+        } else if(mouse.y < this.box.top + (this.barSize / 7)) { // top
           this.mouseZonePosition = 'top';
         } else if(mouse.y > this.box.bottom - this.barSize) { // bottom
           this.mouseZonePosition = 'bottom';

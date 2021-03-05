@@ -380,6 +380,9 @@ this.Window = (function($) {
         this.eventsHandlers.push({element: self.windowButtonsObject, handlerFunction: handler, eventType: 'mousedown'}),
 
         Utils.attachEvent(self.barObject, 'mousedown', handler = function(evt) {
+			
+		  if(self.mouseZonePosition !== 'center')
+			return true;
 
 
           evt.preventDefault();
@@ -406,8 +409,9 @@ this.Window = (function($) {
 
           _setFocus.call(self);
           
-		  if(!self.flags.maximized)
-            self.maximizeButton.dispatchEvent(new Event('click'));
+		  
+          self.maximizeButton.dispatchEvent(new Event('click'));
+		
 
         }),
 
@@ -783,9 +787,9 @@ this.Window = (function($) {
         var mouse = _getMousePosition(object, evt);
 
 
-        if(mouse.x < this.box.left + this.barSize) { // left
+        if(mouse.x < this.box.left + 7) { // left
 
-           if(mouse.y < this.box.top + this.barSize) {
+           if(mouse.y < this.box.top + (this.barSize / 7)) {
              this.mouseZonePosition = 'top-left';
            } else if(mouse.y > this.box.bottom - this.barSize) {
              this.mouseZonePosition = 'bottom-left';
@@ -793,9 +797,9 @@ this.Window = (function($) {
              this.mouseZonePosition = 'left';
            }
 
-        } else if(mouse.x > this.box.right - this.barSize) { // right
+        } else if(mouse.x > this.box.right - 7) { // right
 
-           if(mouse.y < this.box.top + this.barSize) {
+           if(mouse.y < this.box.top + (this.barSize / 7)) {
              this.mouseZonePosition = 'top-right';
            } else if(mouse.y > this.box.bottom - this.barSize) {
              this.mouseZonePosition = 'bottom-right';
@@ -803,13 +807,15 @@ this.Window = (function($) {
              this.mouseZonePosition = 'right';
            }
 
-        } else if(mouse.y < this.box.top + this.barSize) { // top
+        } else if(mouse.y < this.box.top + (this.barSize / 7)) { // top
           this.mouseZonePosition = 'top';
         } else if(mouse.y > this.box.bottom - this.barSize) { // bottom
           this.mouseZonePosition = 'bottom';
         } else {
           this.mouseZonePosition = 'center';
         }
+		
+		//console.log(this.mouseZonePosition, mouse.y, this.box.bottom - this.barSize);
 
      }
 
@@ -936,6 +942,8 @@ this.Window = (function($) {
      *
      */
      function _setCssDimensionsElement(element, box) {
+
+          console.log(element);
 
           element.style.top    = box.top + 'px';
           element.style.left   = box.left + 'px';
