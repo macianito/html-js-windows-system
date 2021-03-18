@@ -779,7 +779,10 @@ this.Window = (function($) {
      */
      function _setMouseZonePosition(object, evt) {
 
-        var mouse = _getMousePosition(object, evt);
+        var mouse = _getAbsoluteMousePosition(evt);
+		
+		if(this.flags.maximized)
+	      return this.mouseZonePosition = 'center';
 
 
         if(mouse.x < this.box.left + 7) { // left
@@ -809,6 +812,8 @@ this.Window = (function($) {
         } else {
           this.mouseZonePosition = 'center';
         }
+		
+		return this.mouseZonePosition;
 		
 		//console.log(this.mouseZonePosition, mouse.y, this.box.bottom - this.barSize);
 
@@ -902,12 +907,12 @@ this.Window = (function($) {
      */
      function _setCssDimensionsElement(element, box) {
 
-        Utils.getjQueryObject(element).css({
-          top    : box.top + 'px',
-          left   : box.left + 'px',
-          width  : (box.right - box.left) + 'px',
-          height : (box.bottom - box.top) + 'px'
-        });
+       Utils.getjQueryObject(element).css({
+         top    : box.top + 'px',
+         left   : box.left + 'px',
+         width  : (box.right - box.left) + 'px',
+         height : (box.bottom - box.top) + 'px'
+       });
 
      }
 

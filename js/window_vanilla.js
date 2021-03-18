@@ -784,7 +784,10 @@ this.Window = (function($) {
      */
      function _setMouseZonePosition(object, evt) {
 
-        var mouse = _getMousePosition(object, evt);
+        if(this.flags.maximized)
+	      return this.mouseZonePosition = 'center';
+		
+		var mouse = _getAbsoluteMousePosition(evt);
 
 
         if(mouse.x < this.box.left + 7) { // left
@@ -814,6 +817,8 @@ this.Window = (function($) {
         } else {
           this.mouseZonePosition = 'center';
         }
+		
+		return this.mouseZonePosition;
 		
 		//console.log(this.mouseZonePosition, mouse.y, this.box.bottom - this.barSize);
 
@@ -850,17 +855,15 @@ this.Window = (function($) {
                '</div>' +
                '<div class="content"></div>';
 
-    var node = document.createElement("DIV");
+      var node = document.createElement("DIV");
 
-    node.id = id;
+      node.id = id;
 
-    node.className = 'window';
+      node.className = 'window';
 
-    node.innerHTML = wstr;
+      node.innerHTML = wstr;
 
-    document.querySelectorAll("body")[0].appendChild(node);
-
-
+      document.querySelectorAll("body")[0].appendChild(node);
 
    }
 
@@ -943,12 +946,12 @@ this.Window = (function($) {
      */
      function _setCssDimensionsElement(element, box) {
 
-          console.log(element);
+          //console.log(element);
 
-          element.style.top    = box.top + 'px';
-          element.style.left   = box.left + 'px';
-          element.style.width  = (box.right - box.left) + 'px';
-          element.style.height = (box.bottom - box.top) + 'px';
+       element.style.top    = box.top + 'px';
+       element.style.left   = box.left + 'px';
+       element.style.width  = (box.right - box.left) + 'px';
+       element.style.height = (box.bottom - box.top) + 'px';
 
      }
 
@@ -962,7 +965,7 @@ this.Window = (function($) {
      *
      */
      function _getMousePosition(object, evt) {
-       return Utils.getMousePosition(object, evt);;
+       return Utils.getMousePosition(object, evt);
      }
 
     /**
