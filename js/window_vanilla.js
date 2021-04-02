@@ -9,6 +9,64 @@
 /** @global store window Objects */
 window.windowSystem = {}; // mirar fer objecte {}
 
+/**
+ * Close all windows
+ *
+ * @public
+ *
+ */
+window.windowSystem.closeWindows = function() {
+  for(var i in this) {
+    
+	if(typeof(this[i].close) != 'undefined')
+	  this[i].close();
+    
+	if(typeof(this[i]) != 'function')
+	  delete this[i];	
+  
+  }
+}
+
+/**
+ * Get window by id.
+ *
+ * @public
+ *
+ * @param {string} id - window's id.
+ * @returns {(object|boolean)} the window object 
+ *
+ */
+window.windowSystem.getWindowById = function(id) {
+  
+  var id = id.charAt(0) != '#' ? '#' + id : id;
+  
+  return typeof(this[id]) != 'undefined' ? this[id] : false;
+
+}
+
+/**
+ * get all windows
+ *
+ * @public
+ * @returns {array} array of window object 
+ *
+ */
+window.windowSystem.getWindows = function() {
+	
+  var windows = [];
+  
+  for(var id in this) {
+    
+	if(typeof(this[id]) != 'function' && id.charAt(0) == '#')
+	  windows.push(this[id]);	
+  
+  }
+  
+  return windows;
+
+}
+
+
 /** @global object constructor function of windows */
 this.Window = (function($) {
     'use strict';
