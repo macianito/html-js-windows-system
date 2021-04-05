@@ -120,6 +120,10 @@ this.Window = (function($) {
       if(options.idWindow && options.idWindow.charAt(0) != '#') {
         options.idWindow = '#' + options.idWindow;
       }
+	  
+	  if(options.unique) { // if this window is the unique open window
+        window.windowSystem.closeWindows();
+      }
 
       this.idWindow = options.idWindow
         ? options.idWindow.charAt(0) != '#'
