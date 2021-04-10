@@ -66,6 +66,28 @@ window.windowSystem.getWindows = function() {
 
 }
 
+/**
+ * get focused window
+ *
+ * @public
+ * @returns {object} window object 
+ *
+ */
+window.windowSystem.getFocusedWindow = function() {
+	
+  var windows = this.getWindows();
+  
+  for(var i = 0; i < windows.length; i++) {
+	
+    if(windows[i].windowObject.hasClass('window-focused'))
+	  return windows[i];
+  
+  }
+  
+  return null;
+
+}
+
 /** @global object constructor function of windows */
 this.Window = (function($) {
     'use strict';
@@ -286,6 +308,18 @@ this.Window = (function($) {
       _destroy.call(this);
 
     };
+	
+	/**
+    * Set the focus to the window.
+    *
+    * @public
+    *
+    */
+    Window.prototype.setFocus = function () {
+
+      _setFocus.call(this);
+
+    }
 
     /**
      * Hide the window
