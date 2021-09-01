@@ -17,15 +17,15 @@ window.windowSystem = {}; // mirar fer objecte {}
  */
 window.windowSystem.closeWindows = function() {
   for(var i in this) {
-    
-	if(typeof(this[i].close) != 'undefined')
-	  this[i].close();
-    
-	if(typeof(this[i]) != 'function')
-	  delete this[i];	
-  
+
+    if(typeof(this[i].close) != 'undefined')
+      this[i].close();
+
+    if(typeof(this[i]) != 'function')
+      delete this[i];
+
   }
-}
+};
 
 /**
  * Get window by id.
@@ -33,60 +33,60 @@ window.windowSystem.closeWindows = function() {
  * @public
  *
  * @param {string} id - window's id.
- * @returns {(object|boolean)} the window object 
+ * @returns {(object|boolean)} the window object
  *
  */
 window.windowSystem.getWindowById = function(id) {
-  
+
   var id = id.charAt(0) != '#' ? '#' + id : id;
-  
+
   return typeof(this[id]) != 'undefined' ? this[id] : false;
 
-}
+};
 
 /**
  * get all windows
  *
  * @public
- * @returns {array} array of window object 
+ * @returns {array} array of window object
  *
  */
 window.windowSystem.getWindows = function() {
-	
+
   var windows = [];
-  
+
   for(var id in this) {
-    
-	if(typeof(this[id]) != 'function' && id.charAt(0) == '#')
-	  windows.push(this[id]);	
-  
+
+    if(typeof(this[id]) != 'function' && id.charAt(0) == '#')
+      windows.push(this[id]);
+
   }
-  
+
   return windows;
 
-}
+};
 
 /**
  * get focused window
  *
  * @public
- * @returns {object} window object 
+ * @returns {object} window object
  *
  */
 window.windowSystem.getFocusedWindow = function() {
-	
+
   var windows = this.getWindows();
-  
+
   for(var i = 0; i < windows.length; i++) {
-	
+
     if(windows[i].windowObject.hasClass('window-focused'))
-	  return windows[i];
-  
+      return windows[i];
+
   }
-  
+
   return null;
 
-}
+};
 
 /** @global object constructor function of windows */
 this.Window = (function($) {
@@ -141,12 +141,12 @@ this.Window = (function($) {
       if(options.idWindow && options.idWindow.charAt(0) != '#') {
         options.idWindow = '#' + options.idWindow;
       }
-	  
-	  if(options.unique) { // if this window is the unique open window
+
+      if(options.unique) { // if this window is the unique open window
         window.windowSystem.closeWindows();
       }
-	  
-	  
+
+
 
       this.idWindow = options.idWindow
         ? options.idWindow.charAt(0) != '#'
@@ -186,8 +186,10 @@ this.Window = (function($) {
       this.closeButton    = $(this.idWindow + ' .close-button'),
 
       this.barSize        = options.barSize || 37; // set bar size
-	  
-	  this.winMinHeight   = options.minHeight || 70; // window minimal height 
+
+      this.winMinHeight   = options.minHeight || 70; // window minimal height
+      this.winMinWidth    = options.minWidth  || 50; // window minimal width
+      this.winMinSize     = false; // window minimal sixe
 
       this.contentObject.css('padding-top', (this.barSize + 5) + 'px'); // 5px to separate bar from content top
 
@@ -308,8 +310,8 @@ this.Window = (function($) {
       _destroy.call(this);
 
     };
-	
-	/**
+
+    /**
     * Set the focus to the window.
     *
     * @public
@@ -378,7 +380,7 @@ this.Window = (function($) {
       _storeBox.call(this);
 
     };
-   
+
     /**
      * Maximize window.
      *
@@ -390,7 +392,7 @@ this.Window = (function($) {
       _maximizeWindow.call(this);
 
     };
-   
+
     /**
      * Minimize window.
      *
@@ -476,9 +478,9 @@ this.Window = (function($) {
         this.eventsHandlers.push({element: self.windowButtonsObject[0], handlerFunction: handler, eventType: 'mousedown'}),
 
         Utils.attachEvent(self.barObject[0], 'mousedown', handler = function(evt) {
-			
-		  if(self.mouseZonePosition !== 'center')
-			return true;
+
+          if(self.mouseZonePosition !== 'center')
+            return true;
 
           evt.preventDefault();
 
@@ -495,12 +497,12 @@ this.Window = (function($) {
         }),
 
         this.eventsHandlers.push({element: self.barObject[0], handlerFunction: handler, eventType: 'mousedown'}),
-		
-		Utils.attachEvent(self.barObject[0], 'dblclick', handler = function(evt) {
+
+        Utils.attachEvent(self.barObject[0], 'dblclick', handler = function(evt) {
 
 
           evt.preventDefault();
-		  evt.stopPropagation();
+          evt.stopPropagation();
 
           _setFocus.call(self);
 
@@ -553,7 +555,7 @@ this.Window = (function($) {
 
           _setFocus.call(self); //  set focus to this window
 
-          if(self.mouseZonePosition !== 'center' && !self.flags.maximized) { // if resize zone and not maximized 
+          if(self.mouseZonePosition !== 'center' && !self.flags.maximized) { // if resize zone and not maximized
 
              _memCoordinates.call(self, evt);
              self.flags.resizing = true;
@@ -807,10 +809,36 @@ this.Window = (function($) {
      *
      */
      function _resizeWindow(mouseZonePosition, vectorResize) {
-		 
-		if((this.box.top + this.winMinHeight) > (this.box.bottom) && vectorResize.y <= 0) { // set minimal height
-		  return;
-		} 
+
+        /* if((this.box.top + this.winMinHeight) > (this.box.bottom) && vectorResize.y <= 0) { // set minimal height
+          return;
+        }
+
+        if((this.box.right - this.winMinWidth) < (this.box.left) && vectorResize.x <= 0) { // set minimal width
+          return;
+        } */
+
+        if(!this.winMinSize) {
+          if((this.box.top + this.box.bootom < this.winMinHeight) ||
+             (this.box.right - this.box.left < this.winMinWidth)
+           ) { // set minimal size
+            this.winMinSize = true;
+            return;
+          }
+        } else {
+
+          if((mouseZonePosition == 'left' && vectorResize.x > 0)  ||
+             (mouseZonePosition == 'right' && vectorResize.x < 0) ||
+             (mouseZonePosition == 'top' && vectorResize.y < 0)   ||
+             (mouseZonePosition == 'bottom' && vectorResize.y > 0)
+          ) {
+            return;
+          } else {
+            this.winMinSize = false;
+          }
+
+
+        }
 
         switch(mouseZonePosition) {
           case 'left':
@@ -877,9 +905,9 @@ this.Window = (function($) {
      function _setMouseZonePosition(object, evt) {
 
         var mouse = _getAbsoluteMousePosition(evt);
-		
-		if(this.flags.maximized)
-	      return this.mouseZonePosition = 'center';
+
+        if(this.flags.maximized)
+          return this.mouseZonePosition = 'center';
 
 
         if(mouse.x < this.box.left + 7) { // left
@@ -909,10 +937,10 @@ this.Window = (function($) {
         } else {
           this.mouseZonePosition = 'center';
         }
-		
-		return this.mouseZonePosition;
-		
-		//console.log(this.mouseZonePosition, mouse.y, this.box.bottom - this.barSize);
+
+        return this.mouseZonePosition;
+
+        //console.log(this.mouseZonePosition, mouse.y, this.box.bottom - this.barSize);
 
      }
 
