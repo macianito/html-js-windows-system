@@ -278,7 +278,7 @@ this.Window = (function($) {
     Window.prototype.setContentIframe = function(url) {
       this.contentObject.innerHTML = '<iframe id="iframe-' + this.id + '" class="iframe-content" src="' + url + '"></iframe>';
       _createWindowUnfocusedOverlay.call(this);
-	};
+    };
 
 
 
