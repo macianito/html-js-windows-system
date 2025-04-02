@@ -13,12 +13,12 @@
 
  .window.window-focused {
    z-index: 99999;
-   -webkit-user-select: none; /* Safari */        
+   -webkit-user-select: none; /* Safari */
    -moz-user-select: none; /* Firefox */
    -ms-user-select: none; /* IE10+/Edge */
    user-select: none; /* Standard */
  }
- 
+
  .window .window-unfocused-overlay {
    display: block;
    position: absolute;
@@ -30,7 +30,7 @@
    background-color: #000;
    opacity: .4;
  }
- 
+
  .window.window-focused .window-unfocused-overlay {
    display: none;
  }
@@ -43,12 +43,12 @@
    background-color: #000;
    position: relative;
    z-index: 4;
-   
-   -webkit-user-select: none; /* Safari */        
+
+   -webkit-user-select: none; /* Safari */
    -moz-user-select: none; /* Firefox */
    -ms-user-select: none; /* IE10+/Edge */
    user-select: none; /* Standard */
-   
+
  }
 
  /* .window .bar:hover {

@@ -222,8 +222,8 @@ this.Window = (function($) {
       _initialize.call(this);
 
       window.windowSystem[this.idWindow] = this; // storereference to window
-	  
-	  
+
+
 
 
       /* Events and custom functions
@@ -264,7 +264,7 @@ this.Window = (function($) {
      */
     Window.prototype.setContentHtml = function(html) {
       this.contentObject.innerHTML = html;
-	  _createWindowUnfocusedOverlay.call(this);
+      _createWindowUnfocusedOverlay.call(this);
     };
 
     /**
@@ -279,8 +279,8 @@ this.Window = (function($) {
       this.contentObject.innerHTML = '<iframe id="iframe-' + this.id + '" class="iframe-content" src="' + url + '"></iframe>';
       _createWindowUnfocusedOverlay.call(this);
 	};
-	
-	
+
+
 
     /**
      * Set the content using html from a dom element.
@@ -292,7 +292,7 @@ this.Window = (function($) {
      */
     Window.prototype.setContentFromObject = function(id) {
       this.contentObject.innerHTML = document.getElementById(id.replace('#', '')).innerHTML;
-	  _createWindowUnfocusedOverlay.call(this);
+      _createWindowUnfocusedOverlay.call(this);
     };
 
 
@@ -1047,8 +1047,8 @@ this.Window = (function($) {
        }
 
      }
-	 
-	/**
+
+    /**
      * Create window unfocused overlay
      *
      * @private
@@ -1059,7 +1059,7 @@ this.Window = (function($) {
        this.contentObject.appendChild(_createElement({_class : 'window-unfocused-overlay'}));
      };
 
-     /**
+    /**
      * Create div object
      *
      * @private

@@ -258,7 +258,7 @@ this.Window = (function($) {
      */
     Window.prototype.setContentHtml = function(html) {
       this.contentObject.html(html);
-	  _createWindowUnfocusedOverlay.call(this);
+      _createWindowUnfocusedOverlay.call(this);
     };
 
     /**
@@ -271,7 +271,7 @@ this.Window = (function($) {
      */
     Window.prototype.setContentIframe = function(url) {
       this.contentObject.html('<iframe id="iframe-' + this.id + '" class="iframe-content" src="' + url + '"></iframe>');
-	  _createWindowUnfocusedOverlay.call(this);
+      _createWindowUnfocusedOverlay.call(this);
     };
 
     /**
@@ -284,7 +284,7 @@ this.Window = (function($) {
      */
     Window.prototype.setContentFromObject = function(id) {
       this.contentObject.html($(id).html());
-	  _createWindowUnfocusedOverlay.call(this);
+      _createWindowUnfocusedOverlay.call(this);
     };
 
 
@@ -1025,8 +1025,8 @@ this.Window = (function($) {
        }
 
      }
-	 
-	/**
+
+    /**
      * Create window unfocused overlay
      *
      * @private
@@ -1036,8 +1036,8 @@ this.Window = (function($) {
      function _createWindowUnfocusedOverlay() {
        this.contentObject.append(_createElement({_class : 'window-unfocused-overlay'}));
      };
-	 
-	/**
+
+    /**
      * Create div object
      *
      * @private
