@@ -179,6 +179,7 @@ this.Window = (function($) {
       this.titleObject   = document.querySelectorAll(this.idWindow + ' .title')[0];
       this.contentObject = document.querySelectorAll(this.idWindow + ' .content')[0];
 
+
       this.windowButtonsObject = document.querySelectorAll(this.idWindow + ' .window-buttons')[0];
 
       // Setup jquery objects Window Buttons
@@ -221,6 +222,8 @@ this.Window = (function($) {
       _initialize.call(this);
 
       window.windowSystem[this.idWindow] = this; // storereference to window
+	  
+	  
 
 
       /* Events and custom functions
@@ -243,8 +246,12 @@ this.Window = (function($) {
      * @param {string} html - content html.
      *
      */
-    Window.prototype.setTitle = function(title) {
+    Window.prototype.setTitle = function(title, tooltip) {
       this.titleObject.innerHTML = title;
+
+      if(tooltip)
+        this.titleObject.setAttribute('title', tooltip);
+
     };
 
     /**
@@ -257,6 +264,7 @@ this.Window = (function($) {
      */
     Window.prototype.setContentHtml = function(html) {
       this.contentObject.innerHTML = html;
+	  _createWindowUnfocusedOverlay.call(this);
     };
 
     /**
@@ -269,7 +277,10 @@ this.Window = (function($) {
      */
     Window.prototype.setContentIframe = function(url) {
       this.contentObject.innerHTML = '<iframe id="iframe-' + this.id + '" class="iframe-content" src="' + url + '"></iframe>';
-    };
+      _createWindowUnfocusedOverlay.call(this);
+	};
+	
+	
 
     /**
      * Set the content using html from a dom element.
@@ -281,6 +292,7 @@ this.Window = (function($) {
      */
     Window.prototype.setContentFromObject = function(id) {
       this.contentObject.innerHTML = document.getElementById(id.replace('#', '')).innerHTML;
+	  _createWindowUnfocusedOverlay.call(this);
     };
 
 
@@ -324,7 +336,7 @@ this.Window = (function($) {
 
       _setFocus.call(this);
 
-    }
+    };
 
     /**
      * Hide the window
@@ -398,7 +410,7 @@ this.Window = (function($) {
      * @public
      *
      */
-     Window.prototype.minimize = function() {
+    Window.prototype.minimize = function() {
 
       _minimizeWindow.call(this);
 
@@ -1035,6 +1047,17 @@ this.Window = (function($) {
        }
 
      }
+	 
+	/**
+     * Create window unfocused overlay
+     *
+     * @private
+     *
+     *
+     */
+     function _createWindowUnfocusedOverlay() {
+       this.contentObject.appendChild(_createElement({_class : 'window-unfocused-overlay'}));
+     };
 
      /**
      * Create div object

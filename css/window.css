@@ -18,6 +18,23 @@
    -ms-user-select: none; /* IE10+/Edge */
    user-select: none; /* Standard */
  }
+ 
+ .window .window-unfocused-overlay {
+   display: block;
+   position: absolute;
+   top: 0;
+   left: 0;
+   z-index: 99998;
+   width: 100%;
+   height: 100%;
+   background-color: #000;
+   opacity: .4;
+ }
+ 
+ .window.window-focused .window-unfocused-overlay {
+   display: none;
+ }
+
 
  .window .bar {
    width: 100%;

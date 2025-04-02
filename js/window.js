@@ -240,8 +240,12 @@ this.Window = (function($) {
      * @param {string} html - content html.
      *
      */
-    Window.prototype.setTitle = function(title) {
+    Window.prototype.setTitle = function(title, tooltip) {
       this.titleObject.html(title);
+
+      if(tooltip)
+        this.titleObject.attr('title', tooltip);
+
     };
 
     /**
@@ -254,6 +258,7 @@ this.Window = (function($) {
      */
     Window.prototype.setContentHtml = function(html) {
       this.contentObject.html(html);
+	  _createWindowUnfocusedOverlay.call(this);
     };
 
     /**
@@ -266,6 +271,7 @@ this.Window = (function($) {
      */
     Window.prototype.setContentIframe = function(url) {
       this.contentObject.html('<iframe id="iframe-' + this.id + '" class="iframe-content" src="' + url + '"></iframe>');
+	  _createWindowUnfocusedOverlay.call(this);
     };
 
     /**
@@ -278,6 +284,7 @@ this.Window = (function($) {
      */
     Window.prototype.setContentFromObject = function(id) {
       this.contentObject.html($(id).html());
+	  _createWindowUnfocusedOverlay.call(this);
     };
 
 
@@ -1016,6 +1023,39 @@ this.Window = (function($) {
          window.windowSystem['movement-overlay'].appendTo('body');
 
        }
+
+     }
+	 
+	/**
+     * Create window unfocused overlay
+     *
+     * @private
+     *
+     *
+     */
+     function _createWindowUnfocusedOverlay() {
+       this.contentObject.append(_createElement({_class : 'window-unfocused-overlay'}));
+     };
+	 
+	/**
+     * Create div object
+     *
+     * @private
+     *
+     * @param {string} id - Id of the movement overlay.
+     *
+     */
+     function _createElement(params) {
+
+       var node = document.createElement((typeof params.type !== 'undefined') ? params.type : "DIV");
+
+       node.id = (typeof params.id !== 'undefined') ? params.id : '';
+
+       node.className = (typeof params._class !== 'undefined') ? params._class : '';
+
+       node.innerHTML = (typeof params.html !== 'undefined') ? params.html : '';
+
+       return node;
 
      }
 
