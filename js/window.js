@@ -22,10 +22,10 @@ window.windowSystem.closeWindows = function() {
   for(var i in this.windows) {
 
     if(typeof(this.windows[i].close) != 'undefined')
-      this[i].close();
+      this.windows[i].close();
 
     if(typeof(this.windows[i]) != 'function')
-      delete this[i];
+      delete this.windows[i];
 
   }
 };
