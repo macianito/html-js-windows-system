@@ -9,6 +9,9 @@
 /** @global store window Objects */
 window.windowSystem = {}; // mirar fer objecte {}
 
+// object to store windows
+window.windowSystem.windows = {};
+
 /**
  * Close all windows
  *
@@ -16,12 +19,12 @@ window.windowSystem = {}; // mirar fer objecte {}
  *
  */
 window.windowSystem.closeWindows = function() {
-  for(var i in this) {
+  for(var i in this.windows) {
 
-    if(typeof(this[i].close) != 'undefined')
+    if(typeof(this.windows[i].close) != 'undefined')
       this[i].close();
 
-    if(typeof(this[i]) != 'function')
+    if(typeof(this.windows[i]) != 'function')
       delete this[i];
 
   }
@@ -40,7 +43,7 @@ window.windowSystem.getWindowById = function(id) {
 
   var id = id.charAt(0) != '#' ? '#' + id : id;
 
-  return typeof(this[id]) != 'undefined' ? this[id] : false;
+  return typeof(this.windows[id]) != 'undefined' ? this.windows[id] : false;
 
 };
 
@@ -55,10 +58,10 @@ window.windowSystem.getWindows = function() {
 
   var windows = [];
 
-  for(var id in this) {
+  for(var id in this.windows) {
 
-    if(typeof(this[id]) != 'function' && id.charAt(0) == '#')
-      windows.push(this[id]);
+    if(typeof(this.windows[id]) != 'function' && id.charAt(0) == '#')
+      windows.push(this.windows[id]);
 
   }
 
@@ -217,7 +220,7 @@ this.Window = (function($) {
       // start Window
       _initialize.call(this);
 
-      window.windowSystem[this.idWindow] = this; // storereference to window
+      window.windowSystem.windows[this.idWindow] = this; // storereference to window
 
 
       /* Events and custom functions
@@ -315,6 +318,11 @@ this.Window = (function($) {
       }
 
       _destroy.call(this);
+
+      // set focus to other window
+      var windowsIds = Object.keys(window.windowSystem.windows);
+      if(windowsIds.length > 0)
+        window.windowSystem.windows[windowsIds[windowsIds.length - 1]].setFocus();
 
     };
 
@@ -712,8 +720,8 @@ this.Window = (function($) {
        this.windowObject.remove();
        this.windowObject = null;
 
-       window.windowSystem[this.idWindow] = null;
-       delete window.windowSystem[this.idWindow];
+       window.windowSystem.windows[this.idWindow] = null;
+       delete window.windowSystem.windows[this.idWindow];
 
     };
 
