@@ -410,7 +410,8 @@ this.Window = (function($) {
      */
     Window.prototype.maximize = function() {
 
-      _maximizeWindow.call(this);
+      //_maximizeWindow.call(this);
+      this.maximizeButton.dispatchEvent(new Event('click'));
 
     };
 
@@ -422,7 +423,7 @@ this.Window = (function($) {
      */
     Window.prototype.minimize = function() {
 
-      _minimizeWindow.call(this);
+      this.minimizeButton.dispatchEvent(new Event('click'));
 
     };
 

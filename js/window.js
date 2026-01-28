@@ -404,7 +404,7 @@ this.Window = (function($) {
      */
     Window.prototype.maximize = function() {
 
-      _maximizeWindow.call(this);
+      this.maximizeButton.trigger('click');
 
     };
 
@@ -416,7 +416,7 @@ this.Window = (function($) {
      */
     Window.prototype.minimize = function() {
 
-      _minimizeWindow.call(this);
+      this.minimizeButton.trigger('click');
 
     };
 
@@ -852,7 +852,6 @@ this.Window = (function($) {
             this.winMinSize = false;
           }
 
-
         }
 
         switch(mouseZonePosition) {
@@ -885,9 +884,6 @@ this.Window = (function($) {
             this.box.bottom = this.boxMem.bottom + vectorResize.y;
           break;
         }
-
-
-
 
         _setCssDimensionsElement(this.windowObject, this.box);
 
