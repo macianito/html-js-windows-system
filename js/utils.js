@@ -33,8 +33,8 @@ Utils = {
   getAbsoluteMousePosition: function(evt) {
      return { x: evt.pageX, y: evt.pageY };
   },
-  getMousePosition: function(object, evt) { // position relative to its parent
-       var parentOffset = $(object).parent().offset();
+  getMousePosition: function(parent, evt) { // position relative to its parent
+       var parentOffset = $(parent).offset();
        return {
          x: evt.pageX - parentOffset.left,
          y: evt.pageY - parentOffset.top
@@ -72,9 +72,9 @@ Utils = {
   },
  /**
   * Get the dimensions of a dom object
-  * 
+  *
   * @private
-  * 
+  *
   * @param {object|jQuery object} element - Dom object to get the domensions from.
   *
   */

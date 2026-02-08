@@ -410,7 +410,13 @@ this.Window = (function($) {
      */
     Window.prototype.maximize = function() {
 
-      //_maximizeWindow.call(this);
+      if(this.flags.maximized)
+        return;
+
+      if(this.flags.minimized) {
+        this.flags.minimized = self.flags.maximized = false;
+      }
+
       this.maximizeButton.dispatchEvent(new Event('click'));
 
     };
