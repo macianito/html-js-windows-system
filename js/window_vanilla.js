@@ -91,6 +91,20 @@ window.windowSystem.getFocusedWindow = function() {
 
 };
 
+/**
+ * get current window
+ *
+ * @public
+ * @returns {object} window object
+ *
+ */
+window.windowSystem.getCurrentWindow = function() {
+
+  return this.getFocusedWindow();
+
+};
+
+
 
 /** @global object constructor function of windows */
 this.Window = (function($) {
