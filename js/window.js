@@ -42,7 +42,6 @@ window.windowSystem.closeWindows = function() {
 window.windowSystem.getWindowById = function(id) {
 
   var id = id.charAt(0) != '#' ? '#' + id : id;
-
   return typeof(this.windows[id]) != 'undefined' ? this.windows[id] : false;
 
 };
@@ -59,10 +58,8 @@ window.windowSystem.getWindows = function() {
   var windows = [];
 
   for(var id in this.windows) {
-
     if(typeof(this.windows[id]) != 'function' && id.charAt(0) == '#')
       windows.push(this.windows[id]);
-
   }
 
   return windows;
@@ -81,10 +78,8 @@ window.windowSystem.getFocusedWindow = function() {
   var windows = this.getWindows();
 
   for(var i = 0; i < windows.length; i++) {
-
     if(windows[i].windowObject.hasClass('window-focused'))
       return windows[i];
-
   }
 
   return null;
@@ -99,15 +94,12 @@ window.windowSystem.getFocusedWindow = function() {
  *
  */
 window.windowSystem.getCurrentWindow = function() {
-
   return this.getFocusedWindow();
-
 };
 
 /** @global object constructor function of windows */
 this.Window = (function($) {
     'use strict';
-
 
     var boxCursors = {
       'left'         : 'w-resize',
@@ -121,17 +113,14 @@ this.Window = (function($) {
       'center'       : 'pointer'
     };
 
-
-
-  /**
-   * Create new instance of a Window.
-   *
-   * @class Represents a Window.
-   *
-   * @param {Object} options - Options to setup the window.
-   *
-   */
-
+   /**
+    * Create new instance of a Window.
+    *
+    * @class Represents a Window.
+    *
+    * @param {Object} options - Options to setup the window.
+    *
+    */
     function Window(options) {
 
         //options and helper vars
@@ -162,8 +151,6 @@ this.Window = (function($) {
         window.windowSystem.closeWindows();
       }
 
-
-
       this.idWindow = options.idWindow
         ? options.idWindow.charAt(0) != '#'
           ? '#' + options.idWindow : options.idWindow
@@ -177,6 +164,8 @@ this.Window = (function($) {
       this.flags.modal = options.modal || false; // set if window is draggable
 
       if(this.flags.modal) { // if true then create overlay
+
+        console.log('_createOverlay(this.id)');
 
         _createOverlay(this.id); // create html overlay
 
@@ -257,6 +246,7 @@ this.Window = (function($) {
      *
      */
     Window.prototype.setTitle = function(title, tooltip) {
+
       this.titleObject.html(title);
 
       if(tooltip)
@@ -346,9 +336,7 @@ this.Window = (function($) {
     *
     */
     Window.prototype.setFocus = function () {
-
       _setFocus.call(this);
-
     }
 
     /**
@@ -435,9 +423,7 @@ this.Window = (function($) {
      *
      */
     Window.prototype.minimize = function() {
-
       this.minimizeButton.trigger('click');
-
     };
 
 
@@ -446,7 +432,6 @@ this.Window = (function($) {
     /* Private helper functions
      ************************************/
 
-
    /**
     * Initialize window events and store references to hadlers.
     *
@@ -454,7 +439,6 @@ this.Window = (function($) {
     *
     *
     */
-
     function _initialize() {
 
         var self = this,
@@ -464,7 +448,7 @@ this.Window = (function($) {
 
           if(self.flags.barMouseDown) {
 
-            if(!self.flags.draggable || self.flags.maximized) {
+            if(!self.flags.draggable || (self.flags.maximized && !self.flags.minimized)) {
               return;
             }
 
@@ -597,7 +581,6 @@ this.Window = (function($) {
              self.windowObject.addClass('content-blocked'); // when resizing start
              window.windowSystem['movement-overlay'].show();
 
-
              self.boxMem = Utils.cloneObject(self.box);
           }
 
@@ -618,7 +601,6 @@ this.Window = (function($) {
             _minimizeWindow.call(self);
 
             self.maximizeButton.removeClass('maximize-button restore-button');
-
 
             if(self.flags.maximized) {
 
@@ -753,7 +735,7 @@ this.Window = (function($) {
     *
     */
     function _setFocus() {
-
+ 
       $('.window').removeClass('window-focused');
       this.windowObject.addClass('window-focused');
 
@@ -767,10 +749,8 @@ this.Window = (function($) {
     *
     */
     function _storeBox() {
-
-       this.box = Utils.getBoxElement(this.windowObject[0]);
-
-     }
+      this.box = Utils.getBoxElement(this.windowObject[0]);
+    }
 
    /**
     * Store the minimized box
@@ -831,9 +811,7 @@ this.Window = (function($) {
      *
      */
      function _restoreWindow() {
-
        _setCssDimensionsElement(this.windowObject, this.box);
-
      }
 
 
@@ -845,68 +823,59 @@ this.Window = (function($) {
      */
      function _resizeWindow(mouseZonePosition, vectorResize) {
 
-        /* if((this.box.top + this.winMinHeight) > (this.box.bottom) && vectorResize.y <= 0) { // set minimal height
-          return;
-        }
-
-        if((this.box.right - this.winMinWidth) < (this.box.left) && vectorResize.x <= 0) { // set minimal width
-          return;
-        } */
-
-        if(!this.winMinSize) {
-          if((this.box.top + this.box.bootom < this.winMinHeight) ||
-             (this.box.right - this.box.left < this.winMinWidth)
-           ) { // set minimal size
-            this.winMinSize = true;
-            return;
+       if(!this.winMinSize) {
+         if((this.box.top + this.box.bootom < this.winMinHeight) ||
+           (this.box.right - this.box.left < this.winMinWidth)
+         ) { // set minimal size
+           this.winMinSize = true;
+           return;
           }
-        } else {
+       } else {
 
-          if((mouseZonePosition == 'left' && vectorResize.x > 0)  ||
-             (mouseZonePosition == 'right' && vectorResize.x < 0) ||
-             (mouseZonePosition == 'top' && vectorResize.y < 0)   ||
-             (mouseZonePosition == 'bottom' && vectorResize.y > 0)
-          ) {
-            return;
-          } else {
-            this.winMinSize = false;
-          }
+         if((mouseZonePosition == 'left' && vectorResize.x > 0)  ||
+            (mouseZonePosition == 'right' && vectorResize.x < 0) ||
+            (mouseZonePosition == 'top' && vectorResize.y < 0)   ||
+            (mouseZonePosition == 'bottom' && vectorResize.y > 0)
+         ) {
+           return;
+         } else {
+           this.winMinSize = false;
+         }
 
-        }
+       }
 
-        switch(mouseZonePosition) {
-          case 'left':
-            this.box.left = this.boxMem.left + vectorResize.x;
-          break;
-          case 'top-left':
-            this.box.left = this.boxMem.left + vectorResize.x;
-            this.box.top = this.boxMem.top + vectorResize.y;
-          break;
-          case 'bottom-left':
-            this.box.left = this.boxMem.left + vectorResize.x;
-            this.box.bottom = this.boxMem.bottom + vectorResize.y;
-          break;
-          case 'right':
-            this.box.right = this.boxMem.right + vectorResize.x;
-          break;
-          case 'top-right':
-            this.box.right = this.boxMem.right + vectorResize.x;
-            this.box.top = this.boxMem.top + vectorResize.y;
-          break;
-          case 'bottom-right':
-            this.box.right = this.boxMem.right + vectorResize.x;
-            this.box.bottom = this.boxMem.bottom + vectorResize.y;
-          break;
-          case 'top':
-            this.box.top = this.boxMem.top + vectorResize.y;
-          break;
-          case 'bottom':
-            this.box.bottom = this.boxMem.bottom + vectorResize.y;
-          break;
-        }
+       switch(mouseZonePosition) {
+         case 'left':
+           this.box.left = this.boxMem.left + vectorResize.x;
+         break;
+         case 'top-left':
+           this.box.left = this.boxMem.left + vectorResize.x;
+           this.box.top = this.boxMem.top + vectorResize.y;
+         break;
+         case 'bottom-left':
+           this.box.left = this.boxMem.left + vectorResize.x;
+           this.box.bottom = this.boxMem.bottom + vectorResize.y;
+         break;
+         case 'right':
+           this.box.right = this.boxMem.right + vectorResize.x;
+         break;
+         case 'top-right':
+           this.box.right = this.boxMem.right + vectorResize.x;
+           this.box.top = this.boxMem.top + vectorResize.y;
+         break;
+         case 'bottom-right':
+           this.box.right = this.boxMem.right + vectorResize.x;
+           this.box.bottom = this.boxMem.bottom + vectorResize.y;
+         break;
+         case 'top':
+           this.box.top = this.boxMem.top + vectorResize.y;
+         break;
+         case 'bottom':
+           this.box.bottom = this.boxMem.bottom + vectorResize.y;
+         break;
+       }
 
-        _setCssDimensionsElement(this.windowObject, this.box);
-
+       _setCssDimensionsElement(this.windowObject, this.box);
 
      }
 
@@ -935,43 +904,41 @@ this.Window = (function($) {
      */
      function _setMouseZonePosition(object, evt) {
 
-        var mouse = _getAbsoluteMousePosition(evt);
+       var mouse = _getAbsoluteMousePosition(evt);
 
-        if(this.flags.maximized)
-          return this.mouseZonePosition = 'center';
+       if(this.flags.maximized)
+         return this.mouseZonePosition = 'center';
 
 
-        if(mouse.x < this.box.left + 7) { // left
+       if(mouse.x < this.box.left + 7) { // left
 
-           if(mouse.y < this.box.top + (this.barSize / 7)) {
-             this.mouseZonePosition = 'top-left';
-           } else if(mouse.y > this.box.bottom - this.barSize) {
-             this.mouseZonePosition = 'bottom-left';
-           } else {
-             this.mouseZonePosition = 'left';
-           }
+         if(mouse.y < this.box.top + (this.barSize / 7)) {
+           this.mouseZonePosition = 'top-left';
+         } else if(mouse.y > this.box.bottom - this.barSize) {
+           this.mouseZonePosition = 'bottom-left';
+         } else {
+           this.mouseZonePosition = 'left';
+         }
 
-        } else if(mouse.x > this.box.right - 7) { // right
+       } else if(mouse.x > this.box.right - 7) { // right
 
-           if(mouse.y < this.box.top + (this.barSize / 7)) {
-             this.mouseZonePosition = 'top-right';
-           } else if(mouse.y > this.box.bottom - this.barSize) {
-             this.mouseZonePosition = 'bottom-right';
-           } else {
-             this.mouseZonePosition = 'right';
-           }
+         if(mouse.y < this.box.top + (this.barSize / 7)) {
+           this.mouseZonePosition = 'top-right';
+         } else if(mouse.y > this.box.bottom - this.barSize) {
+           this.mouseZonePosition = 'bottom-right';
+         } else {
+           this.mouseZonePosition = 'right';
+         }
 
-        } else if(mouse.y < this.box.top + (this.barSize / 7)) { // top
-          this.mouseZonePosition = 'top';
-        } else if(mouse.y > this.box.bottom - this.barSize) { // bottom
-          this.mouseZonePosition = 'bottom';
-        } else {
-          this.mouseZonePosition = 'center';
-        }
+       } else if(mouse.y < this.box.top + (this.barSize / 7)) { // top
+         this.mouseZonePosition = 'top';
+       } else if(mouse.y > this.box.bottom - this.barSize) { // bottom
+         this.mouseZonePosition = 'bottom';
+       } else {
+         this.mouseZonePosition = 'center';
+       }
 
-        return this.mouseZonePosition;
-
-        //console.log(this.mouseZonePosition, mouse.y, this.box.bottom - this.barSize);
+       return this.mouseZonePosition;
 
      }
 
@@ -1021,11 +988,8 @@ this.Window = (function($) {
      function _createOverlay(id) {
 
        if($('.window-overlay').size() === 0) {
-
          window.windowSystem['overlay'] = $('<div id="' + id + '-overlay" class="window-overlay"></div>');
-
          window.windowSystem['overlay'].appendTo('body');
-
        }
 
      }
@@ -1041,11 +1005,8 @@ this.Window = (function($) {
      function _createMovementOverlay(id) {
 
        if($('.window-movement-overlay').length === 0) {
-
          window.windowSystem['movement-overlay'] = $('<div id="' + id + '-movement-overlay" class="window-movement-overlay"></div>');
-
          window.windowSystem['movement-overlay'].appendTo('body');
-
        }
 
      }
@@ -1072,13 +1033,9 @@ this.Window = (function($) {
      function _createElement(params) {
 
        var node = document.createElement((typeof params.type !== 'undefined') ? params.type : "DIV");
-
        node.id = (typeof params.id !== 'undefined') ? params.id : '';
-
        node.className = (typeof params._class !== 'undefined') ? params._class : '';
-
        node.innerHTML = (typeof params.html !== 'undefined') ? params.html : '';
-
        return node;
 
      }

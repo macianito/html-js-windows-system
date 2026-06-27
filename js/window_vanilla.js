@@ -19,15 +19,14 @@ window.windowSystem.windows = {};
  *
  */
 window.windowSystem.closeWindows = function() {
+  
   for(var i in this.windows) {
-
     if(typeof(this.windows[i].close) != 'undefined')
       this.windows[i].close();
-
     if(typeof(this.windows[i]) != 'function')
       delete this.windows[i];
-
   }
+  
 };
 
 /**
@@ -42,7 +41,6 @@ window.windowSystem.closeWindows = function() {
 window.windowSystem.getWindowById = function(id) {
 
   var id = id.charAt(0) != '#' ? '#' + id : id;
-
   return typeof(this.windows[id]) != 'undefined' ? this.windows[id] : false;
 
 };
@@ -59,10 +57,8 @@ window.windowSystem.getWindows = function() {
   var windows = [];
 
   for(var id in this.windows) {
-
     if(typeof(this.windows[id]) != 'function' && id.charAt(0) == '#')
       windows.push(this.windows[id]);
-
   }
 
   return windows;
@@ -81,10 +77,8 @@ window.windowSystem.getFocusedWindow = function() {
   var windows = this.getWindows();
 
   for(var i = 0 in windows) {
-
     if(windows[i].windowObject.classList.contains('window-focused'))
       return windows[i];
-
   }
 
   return null;
@@ -136,9 +130,9 @@ this.Window = (function($) {
 
     function Window(options) {
 
-        //options and helper vars
+      //options and helper vars
 
-       // Flags
+      // Flags
       this.flags = {
           barMouseDown : false,
           resizing     : false,
@@ -357,9 +351,7 @@ this.Window = (function($) {
     *
     */
     Window.prototype.setFocus = function () {
-
       _setFocus.call(this);
-
     };
 
     /**
@@ -442,11 +434,8 @@ this.Window = (function($) {
      *
      */
     Window.prototype.minimize = function() {
-
       this.minimizeButton.dispatchEvent(new Event('click'));
-
     };
-
 
     return Window; // return class after create prototype functions
 
@@ -461,7 +450,6 @@ this.Window = (function($) {
     *
     *
     */
-
     function _initialize() {
 
         var self = this,
@@ -471,7 +459,7 @@ this.Window = (function($) {
 
           if(self.flags.barMouseDown) {
 
-            if(!self.flags.draggable || self.flags.maximized) {
+            if(!self.flags.draggable || (self.flags.maximized  && !self.flags.minimized)) {
               return;
             }
 
@@ -482,13 +470,9 @@ this.Window = (function($) {
 
 
             if(newTop <= 0) {
-
               newTop = 0;
-
             } else if(newTop > windowHeight - self.barSize) {
-
               newTop = windowHeight - self.barSize;
-
             }
 
             self.windowObject.style.top  =  newTop + 'px';
@@ -525,7 +509,6 @@ this.Window = (function($) {
           if(self.mouseZonePosition !== 'center')
             return true;
 
-
           evt.preventDefault();
 
           _setFocus.call(self);
@@ -544,15 +527,12 @@ this.Window = (function($) {
 
         Utils.attachEvent(self.barObject, 'dblclick', handler = function(evt) {
 
-
           evt.preventDefault();
           evt.stopPropagation();
 
           _setFocus.call(self);
 
-
           self.maximizeButton.dispatchEvent(new Event('click'));
-
 
         }),
 
@@ -561,7 +541,6 @@ this.Window = (function($) {
         Utils.attachEvent(self.documentObject, 'mouseup', handler = function(evt) {
 
           if(self.flags.barMouseDown) { // S'HA DE MIRAR NO SIGUI QUE SURT DELS LIMITS DEL DOC AMB MOUSEDOWN I NO FA RES
-
 
             // stores current dimensions when ends action over window
             if(self.flags.minimized)
@@ -598,7 +577,6 @@ this.Window = (function($) {
 
         Utils.attachEvent(self.windowObject, 'mousedown', handler = function(evt) {
 
-
           _setFocus.call(self); //  set focus to this window
 
           if(self.mouseZonePosition !== 'center' && !self.flags.maximized) { // if resize zone and not maximized
@@ -607,7 +585,6 @@ this.Window = (function($) {
              self.flags.resizing = true;
              self.windowObject.classList.add('content-blocked'); // when resizing start
              window.windowSystem['movement-overlay'].style.display = 'block';
-
 
              self.boxMem = Utils.cloneObject(self.box);
           }
@@ -784,9 +761,7 @@ this.Window = (function($) {
     *
     */
     function _storeBox() {
-
        this.box = Utils.getBoxElement(this.windowObject);
-
      }
 
    /**
@@ -814,11 +789,12 @@ this.Window = (function($) {
      *
      */
      function _minimizeWindow() {
-
+      
        this.windowObject.style.top    = this.box.top + 'px';
        this.windowObject.style.left   = this.box.left + 'px';
        this.windowObject.style.width  = this.minimizedWidth + 'px';
        this.windowObject.style.height = this.minimizedHeight + 'px';
+       
      }
 
 
@@ -829,12 +805,12 @@ this.Window = (function($) {
      *
      */
      function _maximizeWindow() {
-
+      
        this.windowObject.style.top    = 0;
        this.windowObject.style.left   = 0;
        this.windowObject.style.width  = '100%';
        this.windowObject.style.height = window.innerHeight + 'px';
-
+       
      }
 
     /**
@@ -844,9 +820,7 @@ this.Window = (function($) {
      *
      */
      function _restoreWindow() {
-
        _setCssDimensionsElement(this.windowObject, this.box);
-
      }
 
 
@@ -857,13 +831,6 @@ this.Window = (function($) {
      *
      */
      function _resizeWindow(mouseZonePosition, vectorResize) {
-
-
-        /* if((this.box.top + this.box.bootom) < this.winMinHeight  && vectorResize.y <= 0) { // set minimal height
-          return;
-        } else if((this.box.right - this.box.left) < this.winMinWidth  && vectorResize.x <= 0) { // set minimal width
-          return;
-        } */
 
         if(!this.winMinSize) {
           if((this.box.top + this.box.bootom < this.winMinHeight) ||
@@ -884,12 +851,7 @@ this.Window = (function($) {
             this.winMinSize = false;
           }
 
-
         }
-
-        // && vectorResize.x <= 0
-        // && vectorResize.y <= 0
-
 
         switch(mouseZonePosition) {
           case 'left':
@@ -924,7 +886,6 @@ this.Window = (function($) {
 
         _setCssDimensionsElement(this.windowObject, this.box);
 
-
      }
 
     /**
@@ -957,7 +918,6 @@ this.Window = (function($) {
 
         var mouse = _getAbsoluteMousePosition(evt);
 
-
         if(mouse.x < this.box.left + 7) { // left
 
            if(mouse.y < this.box.top + (this.barSize / 7)) {
@@ -988,10 +948,7 @@ this.Window = (function($) {
 
         return this.mouseZonePosition;
 
-        //console.log(this.mouseZonePosition, mouse.y, this.box.bottom - this.barSize);
-
      }
-
 
     /**
      * Change the cursor according to cursor position
@@ -1046,13 +1003,8 @@ this.Window = (function($) {
      function _createOverlay(id) {
 
        if(document.querySelectorAll(".window-overlay").length === 0) {
-
-         //window.windowSystem['overlay'] = $('<div id="' + id + '-overlay" class="window-overlay"></div>');
-
          window.windowSystem['overlay'] = _createElement({id : id, _class : 'window-overlay'});
-
          document.querySelectorAll("body")[0].appendChild(window.windowSystem['overlay']);
-
        }
 
      }
@@ -1068,13 +1020,8 @@ this.Window = (function($) {
      function _createMovementOverlay(id) {
 
        if(document.querySelectorAll(".window-movement-overlay").length === 0) {
-
-         //window.windowSystem['movement-overlay'] = $('<div id="' + id + '-movement-overlay" class="window-movement-overlay"></div>');
-
          window.windowSystem['movement-overlay'] = _createElement({id : id, _class : 'window-movement-overlay'});
-
          document.querySelectorAll("body")[0].appendChild(window.windowSystem['movement-overlay']);
-
        }
 
      }
@@ -1101,13 +1048,9 @@ this.Window = (function($) {
      function _createElement(params) {
 
        var node = document.createElement((typeof params.type !== 'undefined') ? params.type : "DIV");
-
        node.id = (typeof params.id !== 'undefined') ? params.id : '';
-
        node.className = (typeof params._class !== 'undefined') ? params._class : '';
-
        node.innerHTML = (typeof params.html !== 'undefined') ? params.html : '';
-
        return node;
 
      }
@@ -1124,14 +1067,12 @@ this.Window = (function($) {
      *
      */
      function _setCssDimensionsElement(element, box) {
-
-          //console.log(element);
-
+      
        element.style.top    = box.top + 'px';
        element.style.left   = box.left + 'px';
        element.style.width  = (box.right - box.left) + 'px';
        element.style.height = (box.bottom - box.top) + 'px';
-
+       
      }
 
      /**
